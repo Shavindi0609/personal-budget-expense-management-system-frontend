@@ -5,7 +5,7 @@ export default function TopicBox() {
   return (
     <div>
         <div className="topicBox">
-            <span>This is the Topic</span>
+            <span className="text">This is the Topic</span>
         </div>
     </div>
   )
