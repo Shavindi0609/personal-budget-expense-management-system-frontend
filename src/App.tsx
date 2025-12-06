@@ -1,19 +1,10 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Accordion from 'react-bootstrap/Accordion';
-import React, {useState, useEffect} from 'react';
+import Router from "./routes";
 
-
-
-function App() {
-
+export default function App() {
   return (
-   <div>
-      <h1>Finwise</h1>
-      <p>Hi</p>
-   </div>
+    // Router handles all pages
+    <Router />
   );
 }
 
-export default App
+
