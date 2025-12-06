@@ -8,11 +8,10 @@ import React, {useState, useEffect} from 'react';
 
 function App() {
 
- 
-
   return (
    <div>
       <h1>Finwise</h1>
+      <p>Hi</p>
    </div>
   );
 }
