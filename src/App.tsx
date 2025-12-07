@@ -70,6 +70,8 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import DashboardUser from "./pages/DashboardUser";
 import CategoriesPage from "./pages/Categories/CategoriesPage";
 import HomePublic from "./pages/HomePublic";
+import UserCategoriesView from "./pages/Categories/UserCategoriesView";
+
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -120,6 +122,16 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+  path="/categories-view"
+  element={
+    <ProtectedRoute>
+      <UserCategoriesView />
+    </ProtectedRoute>
+  }
+/>
+
 
         {/* All other paths */}
         <Route path="*" element={<Navigate to="/" />} />
