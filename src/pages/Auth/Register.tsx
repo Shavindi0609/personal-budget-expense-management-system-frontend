@@ -3,6 +3,7 @@ import api from "../../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { setToken } from "../../store/slices/authSlice";
+import { setUser } from "../../store/slices/userSlice";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -20,16 +21,37 @@ const Register: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/auth/register", form);
-      dispatch(setToken(res.data.accessToken));
-      navigate("/");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     try {
+//       const res = await api.post("/auth/register", form);
+//       dispatch(setToken(res.data.accessToken));
+//       navigate("/");
+//     } catch (err: any) {
+//       setError(err.response?.data?.message || "Registration failed");
+//     }
+//   };
+
+// src/pages/Auth/Register.tsx
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await api.post("/auth/register", form);
+
+    // token save කරන්න
+    dispatch(setToken(res.data.accessToken));
+
+    // user info save කරන්න
+    if (res.data.user) {
+      dispatch(setUser(res.data.user));
     }
-  };
+
+    navigate("/");
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Registration failed");
+  }
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

@@ -3,6 +3,11 @@ import api from "../../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { setToken } from "../../store/slices/authSlice";
+import { setUser } from "../../store/slices/userSlice";
+import { jwtDecode } from "jwt-decode";
+
+
+
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -19,16 +24,44 @@ const Login: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/auth/login", form);
-      dispatch(setToken(res.data.accessToken));
-      navigate("/");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
-    }
-  };
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     try {
+//       const res = await api.post("/auth/login", form);
+//       dispatch(setToken(res.data.accessToken));
+//       navigate("/");
+//     } catch (err: any) {
+//       setError(err.response?.data?.message || "Login failed");
+//     }
+//   };
+
+// src/pages/Auth/Login.tsx
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await api.post("/auth/login", form);
+
+    // Save token
+    dispatch(setToken(res.data.accessToken));
+
+    // Fetch user role from token or /me endpoint
+    const payload = jwtDecode<{ id: string; role: string }>(res.data.accessToken);
+    dispatch(setUser({
+      name: "",      // optionally fetch from /me
+      email: form.email,
+      role: payload.role
+    }));
+
+    // Redirect based on role
+    if (payload.role === "admin") navigate("/admin");
+    else navigate("/user");
+
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
+
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
