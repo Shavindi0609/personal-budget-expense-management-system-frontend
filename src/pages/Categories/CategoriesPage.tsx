@@ -1,41 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../api/axiosClient";
+import { useAppSelector } from "../../store/hooks";
+import CategoryForm from "./CategoryForm";
+import CategoryTable from "./CategoryTable";
+
+interface Category {
+  _id: string;
+  name: string;
+}
 
 const CategoriesPage: React.FC = () => {
-  const [name, setName] = useState("");
-  const [categories, setCategories] = useState<{ name: string }[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const user = useAppSelector((s) => s.user.user);
 
   const fetchCategories = async () => {
-    const res = await api.get("/categories");
-    setCategories(res.data);
-  };
-
-  useEffect(() => { fetchCategories(); }, []);
-
-  const handleAdd = async () => {
     try {
-      const res = await api.post("/categories", { name });
-      setCategories([...categories, res.data]);
-      setName("");
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to add");
+      const res = await api.get("/categories");
+      setCategories(res.data.categories);
+    } catch (err) {
+      console.error("Failed to load categories");
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  if (user?.role !== "admin") {
+    return <p className="text-center mt-10 text-red-500">Admin Only</p>;
+  }
+
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Categories (Admin)</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold mb-4">Manage Categories</h2>
 
-      <div className="flex gap-2 mb-4">
-        <input value={name} onChange={e => setName(e.target.value)} placeholder="Category Name" className="border p-2 rounded" />
-        <button onClick={handleAdd} className="bg-blue-600 text-white p-2 rounded">Add</button>
-      </div>
+      <CategoryForm refresh={fetchCategories} />
 
-      <ul>
-        {categories.map((c, idx) => <li key={idx}>{c.name}</li>)}
-      </ul>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <CategoryTable categories={categories} refresh={fetchCategories} />
+      )}
     </div>
-  )
+  );
 };
 
 export default CategoriesPage;
