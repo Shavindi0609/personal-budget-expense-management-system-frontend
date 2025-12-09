@@ -11,95 +11,130 @@ const CategoriesPage: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
 
-  // Fetch categories on mount
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  // Add new category
   const handleAdd = async () => {
     if (newCategory.trim() === "") return;
-
     const resultAction = await dispatch(addCategory(newCategory));
-    if (addCategory.fulfilled.match(resultAction)) {
-      setNewCategory(""); // clear input
-    } else {
-      alert(resultAction.payload || "Failed to add category");
-    }
+    if (addCategory.fulfilled.match(resultAction)) setNewCategory("");
+    else alert(resultAction.payload || "Failed to add category");
   };
 
-  // Delete category
   const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure?")) {
-      dispatch(deleteCategory(id));
-    }
+    if (window.confirm("Are you sure?")) dispatch(deleteCategory(id));
   };
 
-  // Start editing a category
   const startEdit = (cat: Category) => {
     setEditingId(cat._id);
     setEditingName(cat.name);
   };
 
-  // Save updated category
   const saveEdit = async () => {
     if (!editingName.trim() || !editingId) return;
-
     const resultAction = await dispatch(updateCategory({ id: editingId, name: editingName }));
     if (updateCategory.fulfilled.match(resultAction)) {
       setEditingId(null);
       setEditingName("");
-    } else {
-      alert(resultAction.payload || "Failed to update category");
-    }
+    } else alert(resultAction.payload || "Failed to update category");
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Categories</h1>
+    <div className="bg-[#f4f7ff] min-h-screen p-6">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Categories</h1>
 
-      {/* Add new category */}
-      <div className="mb-4 flex gap-2">
-        <input
-          type="text"
-          placeholder="New category"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          className="border p-2 rounded flex-1"
-        />
-        <button onClick={handleAdd} className="bg-blue-600 text-white px-4 rounded">Add</button>
+        {/* Add new category */}
+        <div className="flex gap-3 mb-6">
+          <input
+            type="text"
+            placeholder="New category"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <button
+            onClick={handleAdd}
+            className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-800 shadow"
+          >
+            Add
+          </button>
+        </div>
+
+        {/* Loading / error */}
+        {loading && <p className="text-gray-600 mb-4">Loading...</p>}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        {/* Table */}
+        <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-purple-700 text-white">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-medium">#</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Category Name</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Created At</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {Array.isArray(categories) &&
+                categories.map((cat: Category, idx) => (
+                  <tr key={cat._id} className="hover:bg-gray-100">
+                    <td className="px-6 py-4 text-sm">{idx + 1}</td>
+                    <td className="px-6 py-4 text-sm">
+                      {editingId === cat._id ? (
+                        <input
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      ) : (
+                        cat.name
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {cat.createdAt ? new Date(cat.createdAt).toLocaleString() : "-"}
+                    </td>
+                    <td className="px-6 py-4 text-sm flex gap-2">
+                      {editingId === cat._id ? (
+                        <>
+                          <button
+                            onClick={saveEdit}
+                            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingId(null)}
+                            className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => startEdit(cat)}
+                            className="text-blue-600 hover:underline"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(cat._id)}
+                            className="text-red-600 hover:underline"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      {/* Loading / error */}
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {/* Categories list */}
-      <ul className="space-y-2">
-        {Array.isArray(categories) && categories.map((cat: Category) => (
-          <li key={cat._id} className="flex justify-between items-center bg-white p-2 rounded shadow">
-            {editingId === cat._id ? (
-              <div className="flex gap-2 flex-1">
-                <input
-                  value={editingName}
-                  onChange={(e) => setEditingName(e.target.value)}
-                  className="border p-1 rounded flex-1"
-                />
-                <button onClick={saveEdit} className="bg-green-600 text-white px-2 rounded">Save</button>
-                <button onClick={() => setEditingId(null)} className="bg-gray-400 text-white px-2 rounded">Cancel</button>
-              </div>
-            ) : (
-              <>
-                <span>{cat.name}</span>
-                <div className="flex gap-2">
-                  <button onClick={() => startEdit(cat)} className="text-blue-500">Edit</button>
-                  <button onClick={() => handleDelete(cat._id)} className="text-red-500">Delete</button>
-                </div>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };

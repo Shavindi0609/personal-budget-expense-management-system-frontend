@@ -1,35 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchExpenses, addExpense, deleteExpense } from "../../store/slices/expensesSlice";
+import {
+  fetchExpenses,
+  addExpense,
+  deleteExpense,
+} from "../../store/slices/expensesSlice";
+import { fetchCategories } from "../../store/slices/categoriesSlice";
 
 const ExpensesPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { expenses, loading, error } = useAppSelector(state => state.expenses);
-  const { categories } = useAppSelector(state => state.categories);
+  const { expenses, loading, error } = useAppSelector((state) => state.expenses);
+  const { categories } = useAppSelector((state) => state.categories);
 
   const [form, setForm] = useState({
     amount: "",
     category: "",
     description: "",
+    date: "",  // 🟢 Add date field
   });
 
+  // Fetch expenses & categories
   useEffect(() => {
     dispatch(fetchExpenses());
+    if (categories.length === 0) dispatch(fetchCategories());
   }, [dispatch]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleAdd = () => {
     if (!form.amount || !form.category) return;
-    dispatch(addExpense({
-      amount: Number(form.amount),
-      category: form.category,
-      description: form.description,
-      date: new Date().toISOString(),
-    }));
-    setForm({ amount: "", category: "", description: "" });
+
+    dispatch(
+      addExpense({
+        title: form.description || "No title",
+        amount: Number(form.amount),
+        category: form.category, // category _id
+        notes: form.description,
+        date: form.date || new Date().toISOString(), // use selected date or now
+      })
+    );
+
+    setForm({ amount: "", category: "", description: "", date: "" });
   };
 
   const handleDelete = (id: string) => {
@@ -42,41 +57,84 @@ const ExpensesPage: React.FC = () => {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-4">Expenses</h1>
 
-      <div className="mb-4 flex gap-2">
+      {/* Add Form */}
+      <div className="mb-4 flex gap-2 flex-wrap">
         <input
           name="amount"
           type="number"
           placeholder="Amount"
           value={form.amount}
           onChange={handleChange}
-          className="border p-2 rounded flex-1"
+          className="border p-2 rounded flex-1 min-w-[120px]"
         />
-        <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded flex-1">
+
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          className="border p-2 rounded flex-1 min-w-[150px]"
+        >
           <option value="">Select Category</option>
-          {categories.map(cat => (
-            <option key={cat._id} value={cat.name}>{cat.name}</option>
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
           ))}
         </select>
+
         <input
           name="description"
           placeholder="Description"
           value={form.description}
           onChange={handleChange}
-          className="border p-2 rounded flex-1"
+          className="border p-2 rounded flex-1 min-w-[150px]"
         />
-        <button onClick={handleAdd} className="bg-blue-600 text-white px-4 rounded">Add</button>
+
+        <input
+          name="date"
+          type="date"   // 🟢 Date input
+          value={form.date}
+          onChange={handleChange}
+          className="border p-2 rounded min-w-[150px]"
+        />
+
+        <button
+          onClick={handleAdd}
+          className="bg-blue-600 text-white px-4 rounded"
+        >
+          Add
+        </button>
       </div>
 
+      {/* Loading / Error */}
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
+      {/* Expenses List */}
       <ul className="space-y-2">
-        {expenses.map(exp => (
-          <li key={exp._id} className="flex justify-between items-center bg-white p-2 rounded shadow">
-            <span>{exp.category}: {exp.amount} LKR - {exp.description}</span>
-            <button onClick={() => handleDelete(exp._id)} className="text-red-500">Delete</button>
-          </li>
-        ))}
+        {expenses.map((exp) => {
+          const category = categories.find((c) => c._id === exp.category);
+
+          return (
+            <li
+              key={exp._id}
+              className="flex justify-between items-center bg-white p-2 rounded shadow flex-wrap"
+            >
+              <span>
+                <strong>{category?.name || "Unknown"}</strong>: {exp.amount} LKR —{" "}
+                {exp.notes || exp.title} —{" "}
+                <em>{new Date(exp.date).toLocaleDateString()}</em>  {/* 🟢 Display date */}
+              </span>
+
+              <button
+                onClick={() => handleDelete(exp._id)}
+                className="text-red-500"
+              >
+                Delete
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

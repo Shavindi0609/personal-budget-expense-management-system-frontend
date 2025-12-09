@@ -70,6 +70,16 @@ const App: React.FC = () => {
   }
 />
 
+        <Route
+  path="/expenses"
+  element={
+    <ProtectedRoute>
+      <ExpensesPage />
+    </ProtectedRoute>
+  }
+/>
+
+
 
         {/* All other paths */}
         <Route path="*" element={<Navigate to="/" />} />
