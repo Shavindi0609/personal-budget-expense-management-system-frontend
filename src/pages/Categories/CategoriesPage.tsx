@@ -1,49 +1,105 @@
+// pages/CategoriesPage.tsx
 import React, { useEffect, useState } from "react";
-import api from "../../api/axiosClient";
-import { useAppSelector } from "../../store/hooks";
-import CategoryForm from "./CategoryForm";
-import CategoryTable from "./CategoryTable";
-
-interface Category {
-  _id: string;
-  name: string;
-}
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchCategories, addCategory, deleteCategory, updateCategory } from "../../store/slices/categoriesSlice";
+import type { Category } from "../../store/slices/categoriesSlice";
 
 const CategoriesPage: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const user = useAppSelector((s) => s.user.user);
+  const dispatch = useAppDispatch();
+  const { categories, loading, error } = useAppSelector(state => state.categories);
+  const [newCategory, setNewCategory] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
 
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get("/categories");
-      setCategories(res.data.categories);
-    } catch (err) {
-      console.error("Failed to load categories");
-    } finally {
-      setLoading(false);
+  // Fetch categories on mount
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  // Add new category
+  const handleAdd = async () => {
+    if (newCategory.trim() === "") return;
+
+    const resultAction = await dispatch(addCategory(newCategory));
+    if (addCategory.fulfilled.match(resultAction)) {
+      setNewCategory(""); // clear input
+    } else {
+      alert(resultAction.payload || "Failed to add category");
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // Delete category
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(deleteCategory(id));
+    }
+  };
 
-  if (user?.role !== "admin") {
-    return <p className="text-center mt-10 text-red-500">Admin Only</p>;
-  }
+  // Start editing a category
+  const startEdit = (cat: Category) => {
+    setEditingId(cat._id);
+    setEditingName(cat.name);
+  };
+
+  // Save updated category
+  const saveEdit = async () => {
+    if (!editingName.trim() || !editingId) return;
+
+    const resultAction = await dispatch(updateCategory({ id: editingId, name: editingName }));
+    if (updateCategory.fulfilled.match(resultAction)) {
+      setEditingId(null);
+      setEditingName("");
+    } else {
+      alert(resultAction.payload || "Failed to update category");
+    }
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Manage Categories</h2>
+    <div className="p-6 max-w-lg mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Categories</h1>
 
-      <CategoryForm refresh={fetchCategories} />
+      {/* Add new category */}
+      <div className="mb-4 flex gap-2">
+        <input
+          type="text"
+          placeholder="New category"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          className="border p-2 rounded flex-1"
+        />
+        <button onClick={handleAdd} className="bg-blue-600 text-white px-4 rounded">Add</button>
+      </div>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <CategoryTable categories={categories} refresh={fetchCategories} />
-      )}
+      {/* Loading / error */}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* Categories list */}
+      <ul className="space-y-2">
+        {Array.isArray(categories) && categories.map((cat: Category) => (
+          <li key={cat._id} className="flex justify-between items-center bg-white p-2 rounded shadow">
+            {editingId === cat._id ? (
+              <div className="flex gap-2 flex-1">
+                <input
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  className="border p-1 rounded flex-1"
+                />
+                <button onClick={saveEdit} className="bg-green-600 text-white px-2 rounded">Save</button>
+                <button onClick={() => setEditingId(null)} className="bg-gray-400 text-white px-2 rounded">Cancel</button>
+              </div>
+            ) : (
+              <>
+                <span>{cat.name}</span>
+                <div className="flex gap-2">
+                  <button onClick={() => startEdit(cat)} className="text-blue-500">Edit</button>
+                  <button onClick={() => handleDelete(cat._id)} className="text-red-500">Delete</button>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
