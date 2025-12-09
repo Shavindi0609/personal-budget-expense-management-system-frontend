@@ -13,6 +13,7 @@ const Register: React.FC = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
@@ -21,84 +22,142 @@ const Register: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     try {
-//       const res = await api.post("/auth/register", form);
-//       dispatch(setToken(res.data.accessToken));
-//       navigate("/");
-//     } catch (err: any) {
-//       setError(err.response?.data?.message || "Registration failed");
-//     }
-//   };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-// src/pages/Auth/Register.tsx
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const res = await api.post("/auth/register", form);
-
-    // token save කරන්න
-    dispatch(setToken(res.data.accessToken));
-
-    // user info save කරන්න
-    if (res.data.user) {
-      dispatch(setUser(res.data.user));
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
     }
 
-    navigate("/");
-  } catch (err: any) {
-    setError(err.response?.data?.message || "Registration failed");
-  }
-};
+    try {
+      const res = await api.post("/auth/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
+      dispatch(setToken(res.data.accessToken));
+
+      if (res.data.user) {
+        dispatch(setUser(res.data.user));
+      }
+
+      navigate("/");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Registration failed");
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form 
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-lg w-96"
-      >
-        <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-
-        <input
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-          required
+      {/* LOGO + HEADER */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <img
+          className="mx-auto h-12 w-auto"
+          src="https://www.svgrepo.com/show/301692/login.svg"
+          alt="Logo"
         />
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create a new account
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-500">
+          Or{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="font-medium text-purple-600 hover:text-purple-500 cursor-pointer"
+          >
+            login to your account
+          </span>
+        </p>
 
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-          type="email"
-          required
-        />
+        {error && (
+          <p className="mt-4 text-center text-red-500 font-medium">{error}</p>
+        )}
+      </div>
 
-        <input
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-          type="password"
-          required
-        />
+      {/* FORM CARD */}
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-6 shadow-xl sm:rounded-2xl sm:px-10">
 
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-600 text-white rounded"
-        >
-          Register
-        </button>
-      </form>
+          <form onSubmit={handleSubmit}>
+
+            {/* NAME */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
+              <input
+                name="name"
+                required
+                placeholder="John Doe"
+                value={form.name}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+              />
+            </div>
+
+            {/* EMAIL */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="user@example.com"
+                value={form.email}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+              />
+            </div>
+
+            {/* PASSWORD */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                name="password"
+                type="password"
+                required
+                value={form.password}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+              />
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                name="confirmPassword"
+                type="password"
+                required
+                value={form.confirmPassword}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+              />
+            </div>
+
+            {/* SUBMIT BUTTON */}
+            <div className="mt-6">
+              <button
+                type="submit"
+                className="w-full flex justify-center py-2 px-4 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition duration-200"
+              >
+                Create account
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
     </div>
   );
 };
