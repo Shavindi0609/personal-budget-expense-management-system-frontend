@@ -8,6 +8,7 @@ export interface Category {
   createdAt?: string;
 }
 
+
 interface CategoriesState {
   categories: Category[];
   loading: boolean;

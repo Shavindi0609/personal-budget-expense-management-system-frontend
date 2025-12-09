@@ -20,10 +20,16 @@ const ExpensesPage: React.FC = () => {
   });
 
   // Fetch expenses & categories
-  useEffect(() => {
-    dispatch(fetchExpenses());
-    if (categories.length === 0) dispatch(fetchCategories());
-  }, [dispatch]);
+useEffect(() => {
+  const loadData = async () => {
+    await dispatch(fetchCategories());
+    await dispatch(fetchExpenses());
+  };
+
+  loadData();
+}, [dispatch]);
+
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

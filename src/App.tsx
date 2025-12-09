@@ -10,24 +10,14 @@ import ExpensesPage from "./pages/Expenses/ExpensesPage";
 import HomePublic from "./pages/HomePublic";
 import UserCategoriesView from "./pages/Categories/UserCategoriesView";
 
-
-import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useAppSelector } from "./store/hooks";
 
 const App: React.FC = () => {
-  const token = useAppSelector(s => s.auth.accessToken);
-  const user = useAppSelector(s => s.user.user);
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
       <Routes>
-        {/* Public Route */}
+        {/* Public Routes */}
         <Route path="/" element={<HomePublic />} />
-
-        {/* Auth */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
@@ -61,27 +51,27 @@ const App: React.FC = () => {
           }
         />
 
+        {/* User Categories */}
         <Route
-  path="/categories-view"
-  element={
-    <ProtectedRoute>
-      <UserCategoriesView />
-    </ProtectedRoute>
-  }
-/>
+          path="/categories-view"
+          element={
+            <ProtectedRoute>
+              <UserCategoriesView />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* Expenses */}
         <Route
-  path="/expenses"
-  element={
-    <ProtectedRoute>
-      <ExpensesPage />
-    </ProtectedRoute>
-  }
-/>
+          path="/expenses"
+          element={
+            <ProtectedRoute>
+              <ExpensesPage />
+            </ProtectedRoute>
+          }
+        />
 
-
-
-        {/* All other paths */}
+        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
