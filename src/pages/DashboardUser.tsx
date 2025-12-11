@@ -62,14 +62,6 @@ const DashboardUser: React.FC = () => {
             <span>Tom Holland</span>
             <span className="text-green-500">+$250</span>
           </li>
-          {/* <li className="flex justify-between">
-            <span>Chris Jericho</span>
-            <span className="text-red-500">-$250</span>
-          </li>
-          <li className="flex justify-between">
-            <span>John Cena</span>
-            <span className="text-green-500">+$250</span>
-          </li> */}
         </ul>
       </div>
     </DashboardLayout>

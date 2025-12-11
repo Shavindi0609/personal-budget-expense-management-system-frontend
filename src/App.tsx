@@ -7,6 +7,7 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import DashboardUser from "./pages/DashboardUser";
 import CategoriesPage from "./pages/Categories/CategoriesPage";
 import ExpensesPage from "./pages/Expenses/ExpensesPage";
+import IncomesPage from "./pages/Incomes/IncomesPage";
 import HomePublic from "./pages/HomePublic";
 import UserCategoriesView from "./pages/Categories/UserCategoriesView";
 
@@ -67,6 +68,16 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <ExpensesPage />
+            </ProtectedRoute>
+          }
+        />
+
+                {/* Incomes */}
+        <Route
+          path="/incomes"
+          element={
+            <ProtectedRoute>
+              <IncomesPage />
             </ProtectedRoute>
           }
         />
