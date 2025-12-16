@@ -101,7 +101,7 @@ const HomePublic: React.FC = () => {
       {/* ---------------------------------------------------- */}
       {/*                SECOND SECTION (FEATURES)             */}
       {/* ---------------------------------------------------- */}
-      <section className="max-w-6xl mx-auto mt-28 grid grid-cols-1 md:grid-cols-2 gap-16 px-6 pb-24">
+      <section className="max-w-6xl mx-auto mt-28 grid grid-cols-1 md:grid-cols-2 gap-16 px-6 pb-24 bg-[#e9edff] py-24">
 
         {/* LEFT SIDE CONTENT */}
         <div className="space-y-10">
