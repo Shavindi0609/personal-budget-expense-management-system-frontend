@@ -190,6 +190,108 @@ const HomePublic: React.FC = () => {
       </section>
 
 
+{/* ---------------------------------------------------- */}
+{/*                    ABOUT US SECTION                  */}
+{/* ---------------------------------------------------- */}
+<section className="bg-[#f4f7ff] py-28">
+  <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+    {/* LEFT SIDE – TEXT */}
+    <div>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+        About <span className="text-purple-700">FinWise</span>
+      </h2>
+
+      <p className="text-lg text-gray-600 mt-6">
+        FinWise was built with one simple mission — to help people take control
+        of their money with clarity and confidence.
+      </p>
+
+      <p className="text-gray-600 mt-4">
+        We believe budgeting shouldn’t feel complicated or restrictive.
+        Instead, it should be simple, visual, and empowering. FinWise combines
+        smart automation with human-friendly design so you always know where
+        your money is going.
+      </p>
+
+      <div className="mt-8 space-y-4">
+        <div className="flex items-start gap-3">
+          <span className="text-purple-700 text-xl">✔</span>
+          <p className="text-gray-700">
+            Built for individuals, families, and small businesses
+          </p>
+        </div>
+
+        <div className="flex items-start gap-3">
+          <span className="text-purple-700 text-xl">✔</span>
+          <p className="text-gray-700">
+            Privacy-first approach with secure data protection
+          </p>
+        </div>
+
+        <div className="flex items-start gap-3">
+          <span className="text-purple-700 text-xl">✔</span>
+          <p className="text-gray-700">
+            Designed to grow with your financial goals
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <Link
+          to="/register"
+          className="inline-block px-8 py-3 bg-purple-700 hover:bg-purple-800 text-white rounded-full text-lg shadow transition"
+        >
+          Start your journey
+        </Link>
+      </div>
+    </div>
+
+    {/* RIGHT SIDE – CARD / IMAGE */}
+    <div className="relative">
+      <div className="bg-white rounded-3xl shadow-2xl p-10">
+        <h4 className="text-xl font-bold text-gray-900 mb-6">
+          Why people choose FinWise
+        </h4>
+
+        <div className="space-y-5">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+              📈
+            </div>
+            <p className="text-gray-700">
+              Clear insights into spending & saving
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+              🔒
+            </div>
+            <p className="text-gray-700">
+              Secure by design, trusted by users
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+              ⚡
+            </div>
+            <p className="text-gray-700">
+              Fast setup, easy to use, no learning curve
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Decorative accent */}
+      <div className="absolute -top-6 -right-6 w-24 h-24 bg-purple-200 rounded-full blur-2xl opacity-60"></div>
+    </div>
+
+  </div>
+</section>
+
+
       {/* ---------------------------------------------------- */}
 {/*          TRUST / SOCIAL PROOF SECTION (QUICKEN STYLE) */}
 {/* ---------------------------------------------------- */}
@@ -274,6 +376,139 @@ const HomePublic: React.FC = () => {
     </div>
   </div>
 </section>
+
+{/* ---------------------------------------------------- */}
+{/*                       FOOTER                         */}
+{/* ---------------------------------------------------- */}
+<footer className="bg-[#0f1020] text-gray-300 pt-20 pb-10">
+  <div className="max-w-6xl mx-auto px-6">
+
+    {/* TOP GRID */}
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+
+      {/* BRAND */}
+      <div>
+        <h3 className="text-2xl font-extrabold text-white">
+          Fin<span className="text-purple-500">Wise</span>
+        </h3>
+        <p className="mt-4 text-sm text-gray-400 leading-relaxed">
+          FinWise helps you manage budgets, track spending, and plan your
+          financial future — all in one simple, secure platform.
+        </p>
+      </div>
+
+      {/* PRODUCT */}
+      <div>
+        <h4 className="text-white font-semibold mb-4">Product</h4>
+        <ul className="space-y-3 text-sm">
+          <li>
+            <Link to="/features" className="hover:text-purple-400 transition">
+              Features
+            </Link>
+          </li>
+          <li>
+            <Link to="/pricing" className="hover:text-purple-400 transition">
+              Pricing
+            </Link>
+          </li>
+          <li>
+            <Link to="/security" className="hover:text-purple-400 transition">
+              Security
+            </Link>
+          </li>
+          <li>
+            <Link to="/roadmap" className="hover:text-purple-400 transition">
+              Roadmap
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      {/* COMPANY */}
+      <div>
+        <h4 className="text-white font-semibold mb-4">Company</h4>
+        <ul className="space-y-3 text-sm">
+          <li>
+            <Link to="/about" className="hover:text-purple-400 transition">
+              About Us
+            </Link>
+          </li>
+          <li>
+            <Link to="/careers" className="hover:text-purple-400 transition">
+              Careers
+            </Link>
+          </li>
+          <li>
+            <Link to="/blog" className="hover:text-purple-400 transition">
+              Blog
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" className="hover:text-purple-400 transition">
+              Contact
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      {/* LEGAL */}
+      <div>
+        <h4 className="text-white font-semibold mb-4">Legal</h4>
+        <ul className="space-y-3 text-sm">
+          <li>
+            <Link to="/privacy" className="hover:text-purple-400 transition">
+              Privacy Policy
+            </Link>
+          </li>
+          <li>
+            <Link to="/terms" className="hover:text-purple-400 transition">
+              Terms of Service
+            </Link>
+          </li>
+          <li>
+            <Link to="/cookies" className="hover:text-purple-400 transition">
+              Cookie Policy
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    {/* DIVIDER */}
+    <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+
+      {/* COPYRIGHT */}
+      <p className="text-sm text-gray-400">
+        © {new Date().getFullYear()} FinWise. All rights reserved.
+      </p>
+
+      {/* SOCIAL ICONS */}
+      <div className="flex items-center gap-4">
+        <a
+          href="#"
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
+        >
+          🌐
+        </a>
+        <a
+          href="#"
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
+        >
+          🐦
+        </a>
+        <a
+          href="#"
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
+        >
+          💼
+        </a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
 
     </div>
   );
