@@ -377,10 +377,149 @@ const HomePublic: React.FC = () => {
   </div>
 </section>
 
+
+     {/* ---------------------------------------------------- */}
+{/*          TESTIMONIAL SECTION (CARD STYLE)             */}
+{/* ---------------------------------------------------- */}
+<section className="bg-[#f4f7ff] py-28">
+  <div className="max-w-7xl mx-auto px-6">
+
+    {/* Heading */}
+    <div className="text-center mb-20">
+      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+        Real people. <span className="text-purple-700">Real financial </span> confidence.
+      </h2>
+      <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+        See how FinWise is helping everyday people take control of their money.
+      </p>
+    </div>
+
+    {/* Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      {[
+        {
+          name: "Sarah M.",
+          title: "SARAH’S STORY",
+          text:
+            "I finally understand where my money goes every month. Budgeting doesn’t feel stressful anymore.",
+          img: "/images/user1.jpg",
+        },
+        {
+          name: "James L.",
+          title: "JAMES’ STORY",
+          text:
+            "FinWise helped me stay consistent. Seeing categories clearly changed everything for me.",
+          img: "/images/user2.jpg",
+        },
+        {
+          name: "Anusha P.",
+          title: "ANUSHA’S STORY",
+          text:
+            "I never thought tracking expenses could feel this simple and motivating.",
+          img: "/images/user3.jpg",
+        },
+      ].map((t, i) => (
+        <div
+          key={i}
+          className="bg-[#f3efe9] rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+        >
+          {/* Image */}
+          <div className="h-[260px] overflow-hidden">
+            <img
+              src={t.img}
+              alt={t.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="p-8 relative">
+
+            {/* Quote Icon */}
+            <div className="text-purple-700 text-6xl leading-none mb-4">
+              “
+            </div>
+
+            <h4 className="text-sm font-semibold tracking-widest text-purple-700 mb-3">
+              {t.title}
+            </h4>
+
+            <p className="text-gray-700 leading-relaxed italic">
+              {t.text}
+            </p>
+
+            <p className="mt-6 font-semibold text-gray-900">
+              — {t.name}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<section className="bg-[#e9edff] py-24">
+  <div className="max-w-4xl mx-auto px-6">
+    <h2 className="text-4xl font-extrabold text-center mb-12">
+      Frequently Asked Questions
+    </h2>
+
+    <div className="space-y-6">
+      {[
+        {
+          q: "Is FinWise really free?",
+          a: "Yes. You can start with our free plan — no credit card required.",
+        },
+        {
+          q: "Is my financial data safe?",
+          a: "Absolutely. We use bank-grade encryption and never sell your data.",
+        },
+        {
+          q: "Can I cancel anytime?",
+          a: "Yes, you’re always in control. Cancel anytime with one click.",
+        },
+      ].map((item, i) => (
+        <div key={i} className="bg-white p-6 rounded-xl shadow">
+          <h4 className="font-semibold text-gray-900">{item.q}</h4>
+          <p className="text-gray-600 mt-2">{item.a}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section className="bg-purple-700 py-24 text-center text-white">
+  <div className="max-w-3xl mx-auto px-6">
+    <h2 className="text-4xl md:text-5xl font-extrabold">
+      Take control of your money today
+    </h2>
+    <p className="text-lg text-purple-100 mt-6">
+      Join millions who budget smarter, save more, and stress less with FinWise.
+    </p>
+
+    <div className="mt-10 flex justify-center gap-4">
+      <Link
+        to="/register"
+        className="px-8 py-4 bg-white text-purple-700 rounded-full font-semibold text-lg shadow hover:bg-gray-100"
+      >
+        Get started free
+      </Link>
+      <Link
+        to="/login"
+        className="px-8 py-4 border border-white/40 rounded-full text-lg hover:bg-white/10"
+      >
+        Sign in
+      </Link>
+    </div>
+  </div>
+</section>
+
 {/* ---------------------------------------------------- */}
 {/*                       FOOTER                         */}
 {/* ---------------------------------------------------- */}
-<footer className="bg-[#0f1020] text-gray-300 pt-20 pb-10">
+<footer className="bg-[#1f2240] text-gray-300 pt-20 pb-10">
   <div className="max-w-6xl mx-auto px-6">
 
     {/* TOP GRID */}
@@ -389,7 +528,7 @@ const HomePublic: React.FC = () => {
       {/* BRAND */}
       <div>
         <h3 className="text-2xl font-extrabold text-white">
-          Fin<span className="text-purple-500">Wise</span>
+          Fin<span className="text-purple-400">Wise</span>
         </h3>
         <p className="mt-4 text-sm text-gray-400 leading-relaxed">
           FinWise helps you manage budgets, track spending, and plan your
@@ -401,26 +540,16 @@ const HomePublic: React.FC = () => {
       <div>
         <h4 className="text-white font-semibold mb-4">Product</h4>
         <ul className="space-y-3 text-sm">
-          <li>
-            <Link to="/features" className="hover:text-purple-400 transition">
-              Features
-            </Link>
-          </li>
-          <li>
-            <Link to="/pricing" className="hover:text-purple-400 transition">
-              Pricing
-            </Link>
-          </li>
-          <li>
-            <Link to="/security" className="hover:text-purple-400 transition">
-              Security
-            </Link>
-          </li>
-          <li>
-            <Link to="/roadmap" className="hover:text-purple-400 transition">
-              Roadmap
-            </Link>
-          </li>
+          {["Features", "Pricing", "Security", "Roadmap"].map((item) => (
+            <li key={item}>
+              <Link
+                to={`/${item.toLowerCase()}`}
+                className="hover:text-purple-400 transition"
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -428,26 +557,16 @@ const HomePublic: React.FC = () => {
       <div>
         <h4 className="text-white font-semibold mb-4">Company</h4>
         <ul className="space-y-3 text-sm">
-          <li>
-            <Link to="/about" className="hover:text-purple-400 transition">
-              About Us
-            </Link>
-          </li>
-          <li>
-            <Link to="/careers" className="hover:text-purple-400 transition">
-              Careers
-            </Link>
-          </li>
-          <li>
-            <Link to="/blog" className="hover:text-purple-400 transition">
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className="hover:text-purple-400 transition">
-              Contact
-            </Link>
-          </li>
+          {["About", "Careers", "Blog", "Contact"].map((item) => (
+            <li key={item}>
+              <Link
+                to={`/${item.toLowerCase()}`}
+                className="hover:text-purple-400 transition"
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -455,24 +574,18 @@ const HomePublic: React.FC = () => {
       <div>
         <h4 className="text-white font-semibold mb-4">Legal</h4>
         <ul className="space-y-3 text-sm">
-          <li>
-            <Link to="/privacy" className="hover:text-purple-400 transition">
-              Privacy Policy
-            </Link>
-          </li>
-          <li>
-            <Link to="/terms" className="hover:text-purple-400 transition">
-              Terms of Service
-            </Link>
-          </li>
-          <li>
-            <Link to="/cookies" className="hover:text-purple-400 transition">
-              Cookie Policy
-            </Link>
-          </li>
+          {["Privacy", "Terms", "Cookies"].map((item) => (
+            <li key={item}>
+              <Link
+                to={`/${item.toLowerCase()}`}
+                className="hover:text-purple-400 transition"
+              >
+                {item} Policy
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
-
     </div>
 
     {/* DIVIDER */}
@@ -485,29 +598,21 @@ const HomePublic: React.FC = () => {
 
       {/* SOCIAL ICONS */}
       <div className="flex items-center gap-4">
-        <a
-          href="#"
-          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
-        >
-          🌐
-        </a>
-        <a
-          href="#"
-          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
-        >
-          🐦
-        </a>
-        <a
-          href="#"
-          className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-600 flex items-center justify-center transition"
-        >
-          💼
-        </a>
+        {["🌐", "🐦", "💼"].map((icon, i) => (
+          <a
+            key={i}
+            href="#"
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-purple-500 flex items-center justify-center transition"
+          >
+            {icon}
+          </a>
+        ))}
       </div>
     </div>
 
   </div>
 </footer>
+
 
 
     </div>
