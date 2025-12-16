@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import api from "../../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/axiosClient";
 import { useAppDispatch } from "../../store/hooks";
 import { setToken } from "../../store/slices/authSlice";
 import { setUser } from "../../store/slices/userSlice";
+import PublicNavbar from "../../components/PublicNavbar";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -38,10 +39,7 @@ const Register: React.FC = () => {
       });
 
       dispatch(setToken(res.data.accessToken));
-
-      if (res.data.user) {
-        dispatch(setUser(res.data.user));
-      }
+      if (res.data.user) dispatch(setUser(res.data.user));
 
       navigate("/login");
     } catch (err: any) {
@@ -50,114 +48,95 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="bg-[#f4f7ff] min-h-screen">
+      <PublicNavbar />
 
-      {/* LOGO + HEADER */}
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img
-          className="mx-auto h-12 w-auto"
-          src="https://www.svgrepo.com/show/301692/login.svg"
-          alt="Logo"
-        />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create a new account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-500">
-          Or{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="font-medium text-purple-600 hover:text-purple-500 cursor-pointer"
-          >
-            login to your account
-          </span>
-        </p>
+      <div className="flex justify-center items-center py-20 px-6">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
+          <h2 className="text-3xl font-extrabold text-gray-900 text-center">
+            Create a new account
+          </h2>
+          <p className="mt-2 text-center text-gray-600">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-purple-700 hover:text-purple-800 cursor-pointer font-semibold"
+            >
+              Login
+            </span>
+          </p>
 
-        {error && (
-          <p className="mt-4 text-center text-red-500 font-medium">{error}</p>
-        )}
-      </div>
+          {error && (
+            <p className="mt-4 text-center text-red-500 font-medium">{error}</p>
+          )}
 
-      {/* FORM CARD */}
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-xl sm:rounded-2xl sm:px-10">
-
-          <form onSubmit={handleSubmit}>
-
-            {/* NAME */}
+          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Name
               </label>
               <input
                 name="name"
-                required
                 placeholder="John Doe"
                 value={form.name}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
+                required
               />
             </div>
 
-            {/* EMAIL */}
-            <div className="mt-6">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
-                Email address
+                Email
               </label>
               <input
-                name="email"
                 type="email"
-                required
+                name="email"
                 placeholder="user@example.com"
                 value={form.email}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
+                required
               />
             </div>
 
-            {/* PASSWORD */}
-            <div className="mt-6">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
-                name="password"
                 type="password"
-                required
+                name="password"
                 value={form.password}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
+                required
               />
             </div>
 
-            {/* CONFIRM PASSWORD */}
-            <div className="mt-6">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Confirm Password
               </label>
               <input
-                name="confirmPassword"
                 type="password"
-                required
+                name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 focus:ring-purple-300 sm:text-sm"
+                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
+                required
               />
             </div>
 
-            {/* SUBMIT BUTTON */}
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition duration-200"
-              >
-                Create account
-              </button>
-            </div>
-
+            <button
+              type="submit"
+              className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition duration-200"
+            >
+              Create Account
+            </button>
           </form>
         </div>
       </div>
-
     </div>
   );
 };

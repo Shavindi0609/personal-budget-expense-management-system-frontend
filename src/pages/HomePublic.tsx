@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PublicNavbar from "../components/PublicNavbar"; // make sure path is correct
 
 const HomePublic: React.FC = () => {
   return (
     <div className="bg-[#f4f7ff] min-h-screen">
+       <PublicNavbar />
 
       {/* ---------------------------------------------------- */}
       {/*                     HERO SECTION                    */}
@@ -44,16 +46,53 @@ const HomePublic: React.FC = () => {
             </p>
           </div>
 
+          
           {/* RIGHT SIDE MOCKUP */}
-          <div className="flex justify-center">
-            <div className="relative w-[300px] h-[600px] bg-white rounded-3xl shadow-2xl p-4">
-              <img
-                src="https://i.imgur.com/Mx1mM3S.png"
-                alt="App Mockup"
-                className="rounded-xl w-full h-full object-cover"
-              />
-            </div>
-          </div>
+{/* RIGHT SIDE HERO MOCKUP */}
+<div className="relative flex justify-center items-center w-full h-[500px] md:h-[550px]">
+  
+  {/* Background image - moved slightly to the right */}
+  <div className="absolute inset-0 flex justify-center items-center">
+    <img
+      src="/mnt/data/8b701540-c4c4-4588-b672-701cbe2ec082.png"
+      alt="People using app"
+      className="rounded-3xl shadow-xl object-cover w-[300px] md:w-[350px] h-[400px] md:h-[450px] z-0 translate-x-10 md:translate-x-16"
+    />
+  </div>
+
+  {/* Phone mockup - moved slightly to the left */}
+  <div className="relative z-10 w-[200px] md:w-[250px] h-[400px] md:h-[500px] bg-white rounded-3xl shadow-2xl overflow-hidden flex justify-center items-center -translate-x-10 md:-translate-x-16">
+    <img
+      src="https://i.imgur.com/Mx1mM3S.png"
+      alt="App Mockup"
+      className="w-full h-full object-cover"
+    />
+
+    {/* Overlay Goal card */}
+    <div className="absolute top-5 right-[-60px] w-36 bg-white shadow-lg rounded-xl p-3">
+      <h4 className="text-sm font-semibold text-gray-700">Goals</h4>
+      <div className="mt-2 text-xs text-gray-500 space-y-1">
+        <p>🏖️ Vacation</p>
+        <p>🎓 Masters Degree</p>
+        <p>🏠 Rental Property</p>
+      </div>
+    </div>
+
+    {/* Overlay Budget card */}
+    <div className="absolute bottom-5 left-[-60px] w-36 bg-white shadow-lg rounded-xl p-3">
+      <h4 className="text-sm font-semibold text-gray-700">Budget</h4>
+      <p className="text-xs text-gray-500 mt-1">Planned: $10,548</p>
+      <p className="text-xs text-gray-500">Spent: $6,856</p>
+      <div className="h-2 bg-purple-200 rounded-full mt-2">
+        <div className="h-2 bg-purple-700 rounded-full w-2/3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
         </div>
       </div>
@@ -149,6 +188,93 @@ const HomePublic: React.FC = () => {
         </div>
 
       </section>
+
+
+      {/* ---------------------------------------------------- */}
+{/*          TRUST / SOCIAL PROOF SECTION (QUICKEN STYLE) */}
+{/* ---------------------------------------------------- */}
+<section className="bg-[#e9edff] py-24">
+  <div className="max-w-6xl mx-auto px-6 text-center">
+
+    {/* Heading */}
+    <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+      Over <span className="text-purple-700">20 million</span> better financial
+      <br className="hidden md:block" />
+      lives built, and counting
+    </h2>
+
+    {/* Cards + Image */}
+    <div className="mt-20 grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
+
+      {/* Card 1 */}
+      <div className="bg-white rounded-2xl shadow-md p-6 text-left">
+        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          ❤️
+        </div>
+        <h4 className="font-semibold text-gray-900">
+          Trusted for over 40 years
+        </h4>
+        <p className="text-gray-600 text-sm mt-2">
+          #1 best-selling with 20+ million customers over 4 decades.
+        </p>
+      </div>
+
+      {/* Card 2 */}
+      <div className="bg-white rounded-2xl shadow-md p-6 text-left">
+        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          🏦
+        </div>
+        <h4 className="font-semibold text-gray-900">
+          Bank-grade security
+        </h4>
+        <p className="text-gray-600 text-sm mt-2">
+          We protect your data with industry-standard 256-bit encryption.
+        </p>
+      </div>
+
+      {/* CENTER IMAGE */}
+      <div className="md:col-span-1 flex justify-center">
+        <div className="relative w-[240px] h-[320px] rounded-3xl overflow-hidden shadow-xl">
+          <img
+            src="/mnt/data/387fe245-cbed-4b51-b33c-6966d33230c9.png"
+            alt="Happy users"
+            className="w-full h-full object-cover"
+          />
+          {/* Decorative rings */}
+          <div className="absolute inset-0 border-2 border-white/40 rounded-3xl"></div>
+        </div>
+      </div>
+
+      {/* Card 3 */}
+      <div className="bg-white rounded-2xl shadow-md p-6 text-left">
+        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          📊
+        </div>
+        <h4 className="font-semibold text-gray-900">
+          Your privacy matters
+        </h4>
+        <p className="text-gray-600 text-sm mt-2">
+          Rest assured, we’ll never sell your personal data.
+        </p>
+      </div>
+
+      {/* Card 4 */}
+      <div className="bg-white rounded-2xl shadow-md p-6 text-left">
+        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          💳
+        </div>
+        <h4 className="font-semibold text-gray-900">
+          No surprise charges or ads
+        </h4>
+        <p className="text-gray-600 text-sm mt-2">
+          No hidden fees or annoying ads. What you see is what you get.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
     </div>
   );
 };
