@@ -44,6 +44,13 @@ const Sidebar: React.FC = () => {
               )}
               <Link to="/expenses" className="block px-3 py-2 rounded hover:bg-purple-100">Expenses</Link>
               <Link to="/incomes" className="block px-3 py-2 rounded hover:bg-purple-100">Incomes</Link>
+               {/* 🔥 NEW ANALYSIS LINK */}
+                  <Link
+                    to="/analysis"
+                    className="block px-3 py-2 rounded hover:bg-purple-100 font-medium text-purple-700"
+                  >
+                    Analysis
+                  </Link>
             </>
           )}
         </nav>

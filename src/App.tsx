@@ -10,6 +10,7 @@ import ExpensesPage from "./pages/Expenses/ExpensesPage";
 import IncomesPage from "./pages/Incomes/IncomesPage";
 import HomePublic from "./pages/HomePublic";
 import UserCategoriesView from "./pages/Categories/UserCategoriesView";
+import AnalysisPage from "./pages/Analysis/AnalysisPage"
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -81,6 +82,16 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+
+        <Route 
+          path="/analysis"
+           element={
+             <ProtectedRoute>
+                 <AnalysisPage />
+             </ProtectedRoute>
+           }
+           />
 
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" />} />
