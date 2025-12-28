@@ -16,20 +16,24 @@ const ExpensesPage: React.FC = () => {
     amount: "",
     category: "",
     description: "",
-    date: "",  // 🟢 Add date field
+    date: "",
   });
 
   // Fetch expenses & categories
-useEffect(() => {
-  const loadData = async () => {
-    await dispatch(fetchCategories());
-    await dispatch(fetchExpenses());
-  };
+  useEffect(() => {
+    const loadData = async () => {
+      await dispatch(fetchCategories());
+      await dispatch(fetchExpenses());
+    };
 
-  loadData();
-}, [dispatch]);
+    loadData();
+  }, [dispatch]);
 
-
+  // 🔥 TOTAL EXPENSES
+  const totalExpenses = expenses.reduce(
+    (sum, exp) => sum + exp.amount,
+    0
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -44,9 +48,9 @@ useEffect(() => {
       addExpense({
         title: form.description || "No title",
         amount: Number(form.amount),
-        category: form.category, // category _id
+        category: form.category,
         notes: form.description,
-        date: form.date || new Date().toISOString(), // use selected date or now
+        date: form.date || new Date().toISOString(),
       })
     );
 
@@ -62,6 +66,14 @@ useEffect(() => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-4">Expenses</h1>
+
+      {/* 🔥 TOTAL EXPENSES CARD */}
+      <div className="mb-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-6 shadow">
+        <p className="text-sm opacity-80">Total Expenses</p>
+        <h2 className="text-3xl font-extrabold mt-1">
+          {totalExpenses.toLocaleString()} LKR
+        </h2>
+      </div>
 
       {/* Add Form */}
       <div className="mb-4 flex gap-2 flex-wrap">
@@ -98,7 +110,7 @@ useEffect(() => {
 
         <input
           name="date"
-          type="date"   // 🟢 Date input
+          type="date"
           value={form.date}
           onChange={handleChange}
           className="border p-2 rounded min-w-[150px]"
@@ -124,17 +136,17 @@ useEffect(() => {
           return (
             <li
               key={exp._id}
-              className="flex justify-between items-center bg-white p-2 rounded shadow flex-wrap"
+              className="flex justify-between items-center bg-white p-3 rounded-xl shadow flex-wrap"
             >
               <span>
-                <strong>{category?.name || "Unknown"}</strong>: {exp.amount} LKR —{" "}
-                {exp.notes || exp.title} —{" "}
-                <em>{new Date(exp.date).toLocaleDateString()}</em>  {/* 🟢 Display date */}
+                <strong>{category?.name || "Unknown"}</strong>:{" "}
+                {exp.amount} LKR — {exp.notes || exp.title} —{" "}
+                <em>{new Date(exp.date).toLocaleDateString()}</em>
               </span>
 
               <button
                 onClick={() => handleDelete(exp._id)}
-                className="text-red-500"
+                className="text-red-500 font-medium"
               >
                 Delete
               </button>

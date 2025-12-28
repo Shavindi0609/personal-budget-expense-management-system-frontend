@@ -98,9 +98,10 @@ const HomePublic: React.FC = () => {
       </div>
 
 
-      {/* ---------------------------------------------------- */}
-      {/*                SECOND SECTION (FEATURES)             */}
-      {/* ---------------------------------------------------- */}
+ {/* ---------------------------------------------------- */}
+ {/*                 FEATURES SECTION                     */}
+ {/* ---------------------------------------------------- */}
+
       <section className="max-w-6xl mx-auto mt-28 grid grid-cols-1 md:grid-cols-2 gap-16 px-6 pb-24 bg-[#e9edff] py-24">
 
         {/* LEFT SIDE CONTENT */}
@@ -193,6 +194,7 @@ const HomePublic: React.FC = () => {
 {/* ---------------------------------------------------- */}
 {/*                    ABOUT US SECTION                  */}
 {/* ---------------------------------------------------- */}
+
 <section className="bg-[#f4f7ff] py-28">
   <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
@@ -292,9 +294,10 @@ const HomePublic: React.FC = () => {
 </section>
 
 
-      {/* ---------------------------------------------------- */}
-{/*          TRUST / SOCIAL PROOF SECTION (QUICKEN STYLE) */}
 {/* ---------------------------------------------------- */}
+{/*         TRUST / SOCIAL PROOF SECTION (QUICKEN STYLE) */}
+{/* ---------------------------------------------------- */}
+
 <section className="bg-[#e9edff] py-24">
   <div className="max-w-6xl mx-auto px-6 text-center">
 
@@ -378,9 +381,10 @@ const HomePublic: React.FC = () => {
 </section>
 
 
-     {/* ---------------------------------------------------- */}
-{/*          TESTIMONIAL SECTION (CARD STYLE)             */}
 {/* ---------------------------------------------------- */}
+{/*          TESTIMONIAL SECTION (CARD STYLE)            */}
+{/* ---------------------------------------------------- */}
+
 <section className="bg-[#f4f7ff] py-28">
   <div className="max-w-7xl mx-auto px-6">
 
@@ -460,6 +464,9 @@ const HomePublic: React.FC = () => {
   </div>
 </section>
 
+{/* ---------------------------------------------------- */}
+{/*  Frequently Asked Questions(FAQ) SECTION             */}
+{/* ---------------------------------------------------- */}
 <section className="bg-[#e9edff] py-24">
   <div className="max-w-4xl mx-auto px-6">
     <h2 className="text-4xl font-extrabold text-center mb-12">
@@ -490,6 +497,11 @@ const HomePublic: React.FC = () => {
   </div>
 </section>
 
+
+{/* ---------------------------------------------------- */}
+{/*                         CTA SECTION                  */}
+{/* ---------------------------------------------------- */}
+
 <section className="bg-purple-700 py-24 text-center text-white">
   <div className="max-w-3xl mx-auto px-6">
     <h2 className="text-4xl md:text-5xl font-extrabold">
@@ -519,6 +531,7 @@ const HomePublic: React.FC = () => {
 {/* ---------------------------------------------------- */}
 {/*                       FOOTER                         */}
 {/* ---------------------------------------------------- */}
+
 <footer className="bg-[#1f2240] text-gray-300 pt-20 pb-10">
   <div className="max-w-6xl mx-auto px-6">
 
