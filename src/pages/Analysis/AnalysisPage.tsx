@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchExpenses } from "../../store/slices/expensesSlice";
+import { fetchIncomes } from "../../store/slices/incomes.slice";
+import { fetchCategories } from "../../store/slices/categoriesSlice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { fetchCategories } from "../../store/slices/categoriesSlice";
 import {
   LineChart,
   Line,
@@ -17,7 +18,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Hex colors only (oklch-free)
+/* ---------- COLORS ---------- */
 const COLORS = [
   "#6366f1",
   "#22c55e",
@@ -30,19 +31,42 @@ const COLORS = [
 
 const AnalysisPage: React.FC = () => {
   const dispatch = useAppDispatch();
+
   const { expenses } = useAppSelector((s) => s.expenses);
   const { categories } = useAppSelector((s) => s.categories);
+  const { items: incomes } = useAppSelector((s) => s.incomes);
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-  const BUDGET = 50000;
+  const [selectedMonth, setSelectedMonth] = useState(
+    new Date().toISOString().slice(0, 7)
+  );
 
+  /* ---------- FETCH DATA ---------- */
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchExpenses());
+    dispatch(fetchIncomes());
   }, [dispatch]);
 
+  /* ---------- MONTHLY INCOME ---------- */
+  const monthlyIncome = useMemo(
+    () =>
+      incomes.filter(
+        (i) => i.date.slice(0, 7) === selectedMonth
+      ),
+    [incomes, selectedMonth]
+  );
+
+  const totalIncome = useMemo(
+    () => monthlyIncome.reduce((sum, i) => sum + i.amount, 0),
+    [monthlyIncome]
+  );
+
+  /* ---------- MONTHLY EXPENSE ---------- */
   const monthlyExpenses = useMemo(
-    () => expenses.filter((e) => e.date.slice(0, 7) === selectedMonth),
+    () =>
+      expenses.filter(
+        (e) => e.date.slice(0, 7) === selectedMonth
+      ),
     [expenses, selectedMonth]
   );
 
@@ -51,24 +75,33 @@ const AnalysisPage: React.FC = () => {
     [monthlyExpenses]
   );
 
+  /* ---------- CATEGORY DATA ---------- */
   const categoryData = useMemo(() => {
     const map: Record<string, number> = {};
     monthlyExpenses.forEach((e) => {
-      const name = categories.find((c) => c._id === e.category)?.name || "Other";
+      const name =
+        categories.find((c) => c._id === e.category)?.name || "Other";
       map[name] = (map[name] || 0) + e.amount;
     });
-    return Object.keys(map).map((k) => ({ name: k, value: map[k] }));
+    return Object.keys(map).map((k) => ({
+      name: k,
+      value: map[k],
+    }));
   }, [monthlyExpenses, categories]);
 
   const distributionData = useMemo(
     () =>
       categoryData.map((c) => ({
         ...c,
-        percent: totalSpent > 0 ? ((c.value / totalSpent) * 100).toFixed(1) : "0",
+        percent:
+          totalSpent > 0
+            ? ((c.value / totalSpent) * 100).toFixed(1)
+            : "0",
       })),
     [categoryData, totalSpent]
   );
 
+  /* ---------- TREND DATA ---------- */
   const trendData = useMemo(() => {
     const map: Record<string, number> = {};
     expenses.forEach((e) => {
@@ -81,32 +114,34 @@ const AnalysisPage: React.FC = () => {
       .map((m) => ({ month: m, amount: map[m] }));
   }, [expenses]);
 
+  /* ---------- EXPORT PDF ---------- */
   const exportPDF = async () => {
     const element = document.getElementById("analysis-report");
     if (!element) return;
 
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((r) => setTimeout(r, 300));
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+    });
 
-    const canvas = await html2canvas(element, { scale: 2, backgroundColor: "#ffffff" });
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF("p", "mm", "a4");
 
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const imgWidth = pageWidth;
+    const imgWidth = 210;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     let heightLeft = imgHeight;
     let position = 0;
 
     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    heightLeft -= 297;
 
     while (heightLeft > 0) {
       position = heightLeft - imgHeight;
       pdf.addPage();
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      heightLeft -= 297;
     }
 
     pdf.save(`FinWise-Analysis-${selectedMonth}.pdf`);
@@ -114,8 +149,8 @@ const AnalysisPage: React.FC = () => {
 
   return (
     <div className="p-6 space-y-10">
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-4 mb-6">
+      {/* ---------- CONTROLS ---------- */}
+      <div className="flex flex-wrap gap-4">
         <input
           type="month"
           value={selectedMonth}
@@ -124,54 +159,66 @@ const AnalysisPage: React.FC = () => {
         />
         <button
           onClick={exportPDF}
-          className="px-4 py-2"
-          style={{ backgroundColor: "#ef4444", color: "#ffffff", borderRadius: "0.5rem" }}
+          className="px-4 py-2 bg-red-500 text-white rounded"
         >
           Export PDF
         </button>
       </div>
 
-      {/* Analysis content */}
       <div id="analysis-report">
-        <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1.5rem" }}>Analysis</h1>
+        <h1 className="text-3xl font-bold mb-6">Analysis</h1>
 
-        {/* Summary cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", marginBottom: "1.5rem" }}>
-          <div style={{ backgroundColor: "#ffffff", padding: "1.5rem", borderRadius: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-            <p style={{ color: "#6b7280" }}>Total Spent</p>
-            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{totalSpent} LKR</h2>
+        {/* ---------- SUMMARY CARDS ---------- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="bg-white p-6 rounded-xl shadow">
+            <p className="text-gray-500">Total Spent</p>
+            <h2 className="text-2xl font-bold">{totalSpent} LKR</h2>
           </div>
 
-          <div style={{ backgroundColor: "#ffffff", padding: "1.5rem", borderRadius: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-            <p style={{ color: "#6b7280" }}>Monthly Budget</p>
-            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{BUDGET} LKR</h2>
+          <div className="bg-white p-6 rounded-xl shadow">
+            <p className="text-gray-500">Monthly Income</p>
+            <h2 className="text-2xl font-bold">
+              {totalIncome.toLocaleString()} LKR
+            </h2>
           </div>
 
           <div
-            style={{
-              padding: "1.5rem",
-              borderRadius: "1rem",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              backgroundColor: totalSpent > BUDGET ? "#ef4444" : "#22c55e",
-              color: "#ffffff",
-            }}
+            className={`p-6 rounded-xl shadow text-white ${
+              totalSpent > totalIncome
+                ? "bg-red-500"
+                : "bg-green-500"
+            }`}
           >
             <p>Status</p>
-            <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-              {totalSpent > BUDGET ? "Over Budget" : "Within Budget"}
+            <h2 className="text-xl font-bold">
+              {totalIncome === 0
+                ? "No Income"
+                : totalSpent > totalIncome
+                ? "Over Budget"
+                : "Within Budget"}
             </h2>
           </div>
         </div>
 
-        {/* Charts */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem", marginBottom: "1.5rem" }}>
-          <div style={{ backgroundColor: "#ffffff", padding: "1.5rem", borderRadius: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ fontWeight: "600", marginBottom: "1rem" }}>Category Breakdown</h3>
-            <ResponsiveContainer width="100%" height={260}>
+        {/* ---------- ALERT ---------- */}
+        {totalSpent > totalIncome && totalIncome > 0 && (
+          <div className="mb-6 p-4 rounded bg-red-100 text-red-700 border border-red-400">
+            🚨 You have spent more than your income this month!
+          </div>
+        )}
+
+        {/* ---------- CHARTS ---------- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <div className="bg-white p-6 rounded-xl shadow">
+            <h3 className="font-semibold mb-4">Category Breakdown</h3>
+            <ResponsiveContainer width="100%" height={280}>
               <PieChart>
                 <Pie data={categoryData} dataKey="value" label>
                   {categoryData.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    <Cell
+                      key={i}
+                      fill={COLORS[i % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -179,29 +226,45 @@ const AnalysisPage: React.FC = () => {
             </ResponsiveContainer>
           </div>
 
-          <div style={{ backgroundColor: "#ffffff", padding: "1.5rem", borderRadius: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ fontWeight: "600", marginBottom: "1rem" }}>Spending Trend</h3>
-            <ResponsiveContainer width="100%" height={260}>
+          <div className="bg-white p-6 rounded-xl shadow">
+            <h3 className="font-semibold mb-4">Spending Trend</h3>
+            <ResponsiveContainer width="100%" height={280}>
               <LineChart data={trendData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="amount" stroke="#6366f1" strokeWidth={3} />
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="#6366f1"
+                  strokeWidth={3}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Expense distribution */}
-        <div style={{ backgroundColor: "#ffffff", padding: "1.5rem", borderRadius: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ fontWeight: "600", marginBottom: "1rem" }}>Expense Distribution</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem" }}>
+        {/* ---------- DISTRIBUTION ---------- */}
+        <div className="bg-white p-6 rounded-xl shadow">
+          <h3 className="font-semibold mb-4">
+            Expense Distribution
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
-                <Pie data={distributionData} dataKey="value" innerRadius={60} outerRadius={100} paddingAngle={4}>
+                <Pie
+                  data={distributionData}
+                  dataKey="value"
+                  innerRadius={60}
+                  outerRadius={100}
+                >
                   {distributionData.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    <Cell
+                      key={i}
+                      fill={COLORS[i % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -210,15 +273,16 @@ const AnalysisPage: React.FC = () => {
 
             <div>
               {distributionData.map((c, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ width: "0.75rem", height: "0.75rem", borderRadius: "50%", backgroundColor: COLORS[i % COLORS.length] }} />
-                    <span style={{ fontWeight: "500" }}>{c.name}</span>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <p style={{ fontWeight: "600" }}>{c.value} LKR</p>
-                    <p style={{ fontSize: "0.75rem", color: "#6b7280" }}>{c.percent}%</p>
-                  </div>
+                <div
+                  key={i}
+                  className="flex justify-between mb-2"
+                >
+                  <span className="font-medium">
+                    {c.name}
+                  </span>
+                  <span>
+                    {c.value} LKR ({c.percent}%)
+                  </span>
                 </div>
               ))}
             </div>
