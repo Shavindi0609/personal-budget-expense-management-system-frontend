@@ -4,6 +4,8 @@ import userReducer from "./slices/userSlice"; // ← add this
 import categoriesReducer from "./slices/categoriesSlice";
 import expensesReducer from "./slices/expensesSlice";
 import incomesReducer from './slices/incomes.slice';
+import savingsReducer from './slices/savingsSlice';
+import savingsGoalsReducer from './slices/savingsGoalsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +13,10 @@ export const store = configureStore({
     user: userReducer, // ← add this
     categories: categoriesReducer,
     expenses: expensesReducer,
-      incomes: incomesReducer,
+    incomes: incomesReducer,
+    savings: savingsReducer,
+    savingsGoals: savingsGoalsReducer,
+
   },
 });
 

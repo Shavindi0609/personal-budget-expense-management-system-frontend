@@ -11,6 +11,7 @@ import IncomesPage from "./pages/Incomes/IncomesPage";
 import HomePublic from "./pages/HomePublic";
 import UserCategoriesView from "./pages/Categories/UserCategoriesView";
 import AnalysisPage from "./pages/Analysis/AnalysisPage"
+import SavingsPage from "./pages/Savings/SavingsPage"
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -82,6 +83,15 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route 
+          path="/savings"
+           element={
+             <ProtectedRoute>
+                 <SavingsPage />
+             </ProtectedRoute>
+           }
+           />
 
 
         <Route 
