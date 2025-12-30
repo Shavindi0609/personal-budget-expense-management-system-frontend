@@ -20,7 +20,9 @@ const initialState: GoalsState = {
   error: null,
 };
 
+// =======================
 // 📋 FETCH GOALS
+// =======================
 export const fetchGoals = createAsyncThunk<
   SavingsGoal[],
   void,
@@ -30,11 +32,15 @@ export const fetchGoals = createAsyncThunk<
     const res = await api.get("/savings/goals");
     return res.data;
   } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Fetch failed");
+    return rejectWithValue(
+      err.response?.data?.message || "Fetch failed"
+    );
   }
 });
 
+// =======================
 // 🎯 CREATE GOAL
+// =======================
 export const createGoal = createAsyncThunk<
   SavingsGoal,
   { title: string; targetAmount: number },
@@ -44,23 +50,32 @@ export const createGoal = createAsyncThunk<
     const res = await api.post("/savings/goals", data);
     return res.data;
   } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Create failed");
+    return rejectWithValue(
+      err.response?.data?.message || "Create failed"
+    );
   }
 });
 
+// =======================
 // 🔥 ADD SAVINGS TO GOAL
-export const addSavingsToGoal = createAsyncThunk(
-  "savingsGoals/addSavings",
-  async (
-    { goalId, amount }: { goalId: string; amount: number }
-  ) => {
+// =======================
+export const addSavingsToGoal = createAsyncThunk<
+  SavingsGoal,
+  { goalId: string; amount: number },
+  { rejectValue: string }
+>("goals/addSavings", async ({ goalId, amount }, { rejectWithValue }) => {
+  try {
     const res = await api.patch(
       `/savings/goals/${goalId}/add`,
       { amount }
     );
     return res.data;
+  } catch (err: any) {
+    return rejectWithValue(
+      err.response?.data?.message || "Add savings failed"
+    );
   }
-);
+});
 
 const savingsGoalsSlice = createSlice({
   name: "savingsGoals",
@@ -68,6 +83,7 @@ const savingsGoalsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // FETCH
       .addCase(fetchGoals.pending, (state) => {
         state.loading = true;
       })
@@ -79,8 +95,23 @@ const savingsGoalsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // CREATE
       .addCase(createGoal.fulfilled, (state, action) => {
         state.goals.unshift(action.payload);
+      })
+
+      // 🔥 ADD SAVINGS (AUTO UPDATE)
+      .addCase(addSavingsToGoal.fulfilled, (state, action) => {
+        const updatedGoal = action.payload;
+
+        const index = state.goals.findIndex(
+          (g) => g._id === updatedGoal._id
+        );
+
+        if (index !== -1) {
+          state.goals[index] = updatedGoal;
+        }
       });
   },
 });

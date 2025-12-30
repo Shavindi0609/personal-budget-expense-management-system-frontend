@@ -61,7 +61,10 @@ const savingsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
+    
   },
 });
+
 
 export default savingsSlice.reducer;
