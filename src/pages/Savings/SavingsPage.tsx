@@ -19,12 +19,18 @@ const SavingsPage: React.FC = () => {
     (state) => state.savingsGoals
   );
 
+  // 🔹 UI states
   const [month, setMonth] = useState(
     new Date().toISOString().slice(0, 7)
   );
 
   const [title, setTitle] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
+
+  // 🔥 MODAL STATES (✅ inside component)
+  const [selectedGoal, setSelectedGoal] = useState<any>(null);
+  const [amountToAdd, setAmountToAdd] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchMonthlySavings(month));
@@ -50,14 +56,12 @@ const SavingsPage: React.FC = () => {
       <h1 className="text-3xl font-bold">Savings</h1>
 
       {/* ================= MONTH PICKER ================= */}
-      <div>
-        <input
-          type="month"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          className="border p-2 rounded"
-        />
-      </div>
+      <input
+        type="month"
+        value={month}
+        onChange={(e) => setMonth(e.target.value)}
+        className="border p-2 rounded"
+      />
 
       {/* ================= MONTHLY SAVINGS CARD ================= */}
       <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-6 shadow">
@@ -70,10 +74,6 @@ const SavingsPage: React.FC = () => {
             <h2 className="text-3xl font-extrabold mt-1">
               {monthly?.savings.toLocaleString() || 0} LKR
             </h2>
-
-            <p className="text-sm opacity-90 mt-1">
-              You saved this month 🎉
-            </p>
 
             <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
               <div>
@@ -94,21 +94,6 @@ const SavingsPage: React.FC = () => {
         )}
       </div>
 
-      {/* ================= STATUS ================= */}
-      {monthly && (
-        <div
-          className={`p-4 rounded-xl ${
-            monthly.savings >= 0
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {monthly.savings >= 0
-            ? "✅ You are saving money. Keep it up!"
-            : "🚨 Expenses exceeded income this month!"}
-        </div>
-      )}
-
       {error && <p className="text-red-500">{error}</p>}
 
       {/* ================= SAVINGS GOALS ================= */}
@@ -120,10 +105,10 @@ const SavingsPage: React.FC = () => {
         {/* ADD GOAL */}
         <div className="flex gap-2 mb-6 flex-wrap">
           <input
-            placeholder="Goal title (ex: Buy Laptop)"
+            placeholder="Goal title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border p-2 rounded flex-1 min-w-[200px]"
+            className="border p-2 rounded flex-1"
           />
 
           <input
@@ -131,7 +116,7 @@ const SavingsPage: React.FC = () => {
             placeholder="Target Amount"
             value={targetAmount}
             onChange={(e) => setTargetAmount(e.target.value)}
-            className="border p-2 rounded min-w-[150px]"
+            className="border p-2 rounded"
           />
 
           <button
@@ -156,16 +141,24 @@ const SavingsPage: React.FC = () => {
                 className="border rounded-xl p-4"
               >
                 <div className="flex justify-between mb-2">
-                  <h3 className="font-semibold">
-                    {goal.title}
-                  </h3>
+                  <h3 className="font-semibold">{goal.title}</h3>
                   <span className="text-sm text-gray-500">
                     {goal.currentAmount.toLocaleString()} /{" "}
                     {goal.targetAmount.toLocaleString()} LKR
                   </span>
                 </div>
 
-                {/* Progress bar */}
+                <button
+                  onClick={() => {
+                    setSelectedGoal(goal);
+                    setShowModal(true);
+                  }}
+                  className="mb-3 text-sm bg-emerald-600 text-white px-3 py-1 rounded"
+                >
+                  ➕ Add Savings
+                </button>
+
+                {/* Progress */}
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div
                     className="bg-green-600 h-3 rounded-full"
@@ -178,17 +171,60 @@ const SavingsPage: React.FC = () => {
                 <p className="text-xs mt-2 text-gray-600">
                   {progress.toFixed(1)}% completed
                 </p>
+
+                {progress >= 100 && (
+                  <p className="mt-1 text-green-600 font-semibold">
+                    🎉 Goal Completed!
+                  </p>
+                )}
               </div>
             );
           })}
-
-          {goals.length === 0 && (
-            <p className="text-gray-500 text-sm">
-              No savings goals yet. Add one 🎯
-            </p>
-          )}
         </div>
       </div>
+
+      {/* ================= ADD SAVINGS MODAL ================= */}
+      {showModal && selectedGoal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+            <h3 className="text-xl font-bold mb-2">
+              Add Savings
+            </h3>
+
+            <p className="text-sm text-gray-600 mb-4">
+              🎯 {selectedGoal.title}
+            </p>
+
+            <input
+              type="number"
+              placeholder="Amount to add"
+              value={amountToAdd}
+              onChange={(e) => setAmountToAdd(e.target.value)}
+              className="border p-2 rounded w-full mb-4"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="border px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => {
+                  // 🔜 dispatch addSavingsToGoal thunk
+                  setShowModal(false);
+                  setAmountToAdd("");
+                }}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
