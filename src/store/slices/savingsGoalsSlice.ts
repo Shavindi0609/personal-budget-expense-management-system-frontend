@@ -48,6 +48,20 @@ export const createGoal = createAsyncThunk<
   }
 });
 
+// 🔥 ADD SAVINGS TO GOAL
+export const addSavingsToGoal = createAsyncThunk(
+  "savingsGoals/addSavings",
+  async (
+    { goalId, amount }: { goalId: string; amount: number }
+  ) => {
+    const res = await api.patch(
+      `/savings/goals/${goalId}/add`,
+      { amount }
+    );
+    return res.data;
+  }
+);
+
 const savingsGoalsSlice = createSlice({
   name: "savingsGoals",
   initialState,

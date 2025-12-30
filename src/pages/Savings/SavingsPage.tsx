@@ -4,6 +4,7 @@ import { fetchMonthlySavings } from "../../store/slices/savingsSlice";
 import {
   fetchGoals,
   createGoal,
+  addSavingsToGoal,
 } from "../../store/slices/savingsGoalsSlice";
 
 const SavingsPage: React.FC = () => {
@@ -149,14 +150,15 @@ const SavingsPage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => {
+                onClick={() => {
                     setSelectedGoal(goal);
                     setShowModal(true);
-                  }}
-                  className="mb-3 text-sm bg-emerald-600 text-white px-3 py-1 rounded"
+                }}
+                className="mb-3 text-sm bg-emerald-600 text-white px-3 py-1 rounded"
                 >
-                  ➕ Add Savings
+                ➕ Add Savings
                 </button>
+
 
                 {/* Progress */}
                 <div className="w-full bg-gray-200 rounded-full h-3">
@@ -213,10 +215,20 @@ const SavingsPage: React.FC = () => {
 
               <button
                 onClick={() => {
-                  // 🔜 dispatch addSavingsToGoal thunk
-                  setShowModal(false);
-                  setAmountToAdd("");
-                }}
+                    if (!amountToAdd || !selectedGoal) return;
+
+                    dispatch(
+                        addSavingsToGoal({
+                        goalId: selectedGoal._id,
+                        amount: Number(amountToAdd),
+                        })
+                    );
+
+                    setShowModal(false);
+                    setAmountToAdd("");
+                    setSelectedGoal(null);
+                    }}
+
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
                 Save
