@@ -213,7 +213,7 @@ const SavingsPage: React.FC = () => {
                 Cancel
               </button>
 
-              <button
+              {/* <button
                 onClick={() => {
                     if (!amountToAdd || !selectedGoal) return;
 
@@ -232,7 +232,30 @@ const SavingsPage: React.FC = () => {
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
                 Save
-              </button>
+              </button> */}
+
+                <button
+                onClick={() => {
+                    if (!amountToAdd || !selectedGoal) return;
+
+                    dispatch(
+                    addSavingsToGoal({
+                        goalId: selectedGoal._id,
+                        amount: Number(amountToAdd),
+                    })
+                    ).then(() => {
+                    dispatch(fetchMonthlySavings(month));
+                    });
+
+                    setShowModal(false);
+                    setAmountToAdd("");
+                    setSelectedGoal(null);
+                }}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                Save
+                </button>
+
             </div>
           </div>
         </div>
