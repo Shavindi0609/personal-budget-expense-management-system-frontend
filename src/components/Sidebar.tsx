@@ -3,6 +3,16 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../store/slices/authSlice";
 import { logoutUser } from "../store/slices/userSlice";
+import {
+  LayoutDashboard,
+  Folder,
+  Wallet,
+  TrendingUp,
+  PiggyBank,
+  BarChart3,
+  LogOut,
+  Shield
+} from "lucide-react";
 
 const Sidebar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +28,6 @@ const Sidebar: React.FC = () => {
     navigate("/");
   };
 
-  // Hide sidebar on public pages
   if (
     location.pathname === "/" ||
     location.pathname === "/login" ||
@@ -27,33 +36,37 @@ const Sidebar: React.FC = () => {
     return null;
   }
 
-  return (
-    <aside className="w-64 bg-white min-h-screen p-6 flex flex-col justify-between shadow-lg">
-      <div>
-        <Link
-          to="/"
-          className="text-2xl font-bold mb-10 block text-purple-700"
-        >
-          FinWise
-        </Link>
+  const linkStyle = (path: string) =>
+    `flex items-center gap-3 px-4 py-2 rounded-xl transition ${
+      location.pathname === path
+        ? "bg-purple-600 text-white shadow"
+        : "text-gray-700 hover:bg-purple-100"
+    }`;
 
-        <nav className="space-y-4 text-gray-700">
+  return (
+    <aside className="w-64 min-h-screen bg-white shadow-xl flex flex-col justify-between px-4 py-6">
+      <div>
+        {/* Logo */}
+        {/* <Link to="/" className="block mb-10"> */}
+          {/* <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-4 text-center shadow-lg">
+            <h1 className="text-2xl font-bold">FinWise</h1>
+            <p className="text-xs text-purple-100">Smart Finance Manager</p>
+          </div> */}
+          <Link to="/" className="text-2xl font-bold mb-10 block text-purple-700">FinWise</Link>
+        {/* </Link> */}
+
+        <nav className="space-y-2">
           {token && user && (
             <>
               {/* ADMIN */}
               {user.role === "admin" && (
                 <>
-                  <Link
-                    to="/admin"
-                    className="block px-3 py-2 rounded hover:bg-purple-100"
-                  >
-                    Admin Dashboard
+                  <Link to="/admin" className={linkStyle("/admin")}>
+                    <Shield size={18} /> Admin Dashboard
                   </Link>
-                  <Link
-                    to="/categories"
-                    className="block px-3 py-2 rounded hover:bg-purple-100"
-                  >
-                    Manage Categories
+
+                  <Link to="/categories" className={linkStyle("/categories")}>
+                    <Folder size={18} /> Manage Categories
                   </Link>
                 </>
               )}
@@ -61,62 +74,47 @@ const Sidebar: React.FC = () => {
               {/* USER */}
               {user.role === "user" && (
                 <>
-                  <Link
-                    to="/user"
-                    className="block px-3 py-2 rounded hover:bg-purple-100"
-                  >
-                    User Dashboard
+                  <Link to="/user" className={linkStyle("/user")}>
+                    <LayoutDashboard size={18} /> Dashboard
                   </Link>
+
                   <Link
                     to="/categories-view"
-                    className="block px-3 py-2 rounded hover:bg-purple-100"
+                    className={linkStyle("/categories-view")}
                   >
-                    Categories
+                    <Folder size={18} /> Categories
                   </Link>
                 </>
               )}
 
               {/* COMMON */}
-              <Link
-                to="/expenses"
-                className="block px-3 py-2 rounded hover:bg-purple-100"
-              >
-                Expenses
+              <Link to="/expenses" className={linkStyle("/expenses")}>
+                <Wallet size={18} /> Expenses
               </Link>
 
-              <Link
-                to="/incomes"
-                className="block px-3 py-2 rounded hover:bg-purple-100"
-              >
-                Incomes
+              <Link to="/incomes" className={linkStyle("/incomes")}>
+                <TrendingUp size={18} /> Incomes
               </Link>
 
-              {/* 🔥 SAVINGS */}
-              <Link
-                to="/savings"
-                className="block px-3 py-2 rounded hover:bg-purple-100 font-medium text-green-700"
-              >
-                Savings
+              <Link to="/savings" className={linkStyle("/savings")}>
+                <PiggyBank size={18} /> Savings
               </Link>
 
-              {/* 🔥 ANALYSIS */}
-              <Link
-                to="/analysis"
-                className="block px-3 py-2 rounded hover:bg-purple-100 font-medium text-purple-700"
-              >
-                Analysis
+              <Link to="/analysis" className={linkStyle("/analysis")}>
+                <BarChart3 size={18} /> Analysis
               </Link>
             </>
           )}
         </nav>
       </div>
 
+      {/* Logout */}
       {token && user && (
         <button
           onClick={handleLogout}
-          className="w-full py-2 mt-6 bg-red-500 text-white rounded hover:bg-red-600"
+          className="flex items-center justify-center gap-2 w-full py-2 rounded-xl bg-red-500 text-white hover:bg-red-600 transition shadow"
         >
-          Logout
+          <LogOut size={18} /> Logout
         </button>
       )}
     </aside>
