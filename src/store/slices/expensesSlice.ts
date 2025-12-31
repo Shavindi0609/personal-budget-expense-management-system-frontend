@@ -62,6 +62,31 @@ export const addExpense = createAsyncThunk<
 });
 
 // ----------------------
+// UPDATE EXPENSE ✅
+// ----------------------
+export const updateExpense = createAsyncThunk<
+  Expense,
+  {
+    id: string;
+    data: {
+      title: string;
+      amount: number;
+      category: string;
+      notes?: string;
+      date: string;
+    };
+  },
+  { rejectValue: string }
+>("expenses/update", async ({ id, data }, { rejectWithValue }) => {
+  try {
+    const res = await api.put(`/expenses/${id}`, data);
+    return res.data.expense;
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || "Update failed");
+  }
+});
+
+// ----------------------
 // DELETE EXPENSE
 // ----------------------
 export const deleteExpense = createAsyncThunk<
@@ -104,6 +129,19 @@ const expensesSlice = createSlice({
       .addCase(addExpense.fulfilled, (state, action: PayloadAction<Expense>) => {
         state.expenses.unshift(action.payload);
       })
+
+      // UPDATE ✅
+      .addCase(
+        updateExpense.fulfilled,
+        (state, action: PayloadAction<Expense>) => {
+          const index = state.expenses.findIndex(
+            (e) => e._id === action.payload._id
+          );
+          if (index !== -1) {
+            state.expenses[index] = action.payload;
+          }
+        }
+      )
 
       // DELETE
       .addCase(
