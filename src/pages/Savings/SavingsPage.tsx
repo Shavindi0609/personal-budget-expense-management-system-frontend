@@ -65,7 +65,7 @@ const SavingsPage: React.FC = () => {
       />
 
       {/* ================= MONTHLY SAVINGS CARD ================= */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-6 shadow">
+      <div className="bg-linear-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-6 shadow">
         <p className="text-sm opacity-80">Monthly Savings</p>
 
         {loading ? (

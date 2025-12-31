@@ -68,7 +68,7 @@ const ExpensesPage: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4">Expenses</h1>
 
       {/* 🔥 TOTAL EXPENSES CARD */}
-      <div className="mb-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-6 shadow">
+      <div className="mb-6 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-6 shadow">
         <p className="text-sm opacity-80">Total Expenses</p>
         <h2 className="text-3xl font-extrabold mt-1">
           {totalExpenses.toLocaleString()} LKR
