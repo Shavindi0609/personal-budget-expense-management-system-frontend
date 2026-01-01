@@ -8,10 +8,38 @@ import {
 } from "../../store/slices/expensesSlice";
 import { fetchCategories } from "../../store/slices/categoriesSlice";
 
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
+
+const months = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+
+const COLORS = [
+  "#7c3aed","#22c55e","#ef4444","#3b82f6",
+  "#f59e0b","#14b8a6","#ec4899","#6366f1"
+];
+
 const ExpensesPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { expenses, loading, error } = useAppSelector((s) => s.expenses);
-  const { categories } = useAppSelector((s) => s.categories);
+  const { expenses, loading, error } = useAppSelector(s => s.expenses);
+  const { categories } = useAppSelector(s => s.categories);
+
+  const now = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth());
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
   const [form, setForm] = useState({
     amount: "",
@@ -28,13 +56,78 @@ const ExpensesPage: React.FC = () => {
     dispatch(fetchExpenses());
   }, [dispatch]);
 
-  const totalExpenses = expenses.reduce((s, e) => s + e.amount, 0);
+  /* =======================
+     FILTER (MONTH + YEAR)
+     ======================= */
+  const filteredExpenses = expenses.filter(exp => {
+    const d = new Date(exp.date);
+    return (
+      d.getMonth() === selectedMonth &&
+      d.getFullYear() === selectedYear
+    );
+  });
 
+  /* =======================
+     THIS & LAST MONTH EXPENSES
+     ======================= */
+  const getMonthExpenses = (month: number, year: number) =>
+    expenses.filter(e => {
+      const d = new Date(e.date);
+      return d.getMonth() === month && d.getFullYear() === year;
+    });
+
+  const thisMonthExpenses = getMonthExpenses(selectedMonth, selectedYear);
+  const lastMonth = selectedMonth === 0 ? 11 : selectedMonth - 1;
+  const lastMonthYear = selectedMonth === 0 ? selectedYear - 1 : selectedYear;
+  const lastMonthExpenses = getMonthExpenses(lastMonth, lastMonthYear);
+
+  /* =======================
+     PIE CHART DATA
+     ======================= */
+  const buildPieData = (list: any[]) => {
+    const map: any = {};
+    list.forEach(e => {
+      map[e.category] = (map[e.category] || 0) + e.amount;
+    });
+    return Object.entries(map).map(([catId, total]) => ({
+      name: categories.find(c => c._id === catId)?.name || "Unknown",
+      value: total as number,
+    }));
+  };
+
+  const thisMonthPie = buildPieData(thisMonthExpenses);
+  const lastMonthPie = buildPieData(lastMonthExpenses);
+
+  /* =======================
+     TOTALS & DIFF
+     ======================= */
+  const thisTotal = thisMonthExpenses.reduce((s, e) => s + e.amount, 0);
+  const lastTotal = lastMonthExpenses.reduce((s, e) => s + e.amount, 0);
+  const diff = thisTotal - lastTotal;
+  const diffColor = diff > 0 ? "text-red-600" : "text-green-600";
+
+  /* =======================
+     MONTH-WISE BAR CHART
+     ======================= */
+  const monthChartData = expenses.reduce((acc: any[], exp) => {
+    const d = new Date(exp.date);
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const monthLabel = `${months[d.getMonth()]} ${d.getFullYear()}`;
+    const existing = acc.find(i => i.key === key);
+    if (existing) {
+      existing.total += exp.amount;
+    } else {
+      acc.push({ key, month: monthLabel, total: exp.amount });
+    }
+    return acc;
+  }, []);
+
+  /* =======================
+     FORM HANDLERS
+     ======================= */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const resetForm = () => {
     setForm({ amount: "", category: "", description: "", date: "" });
@@ -42,10 +135,8 @@ const ExpensesPage: React.FC = () => {
     setShowModal(false);
   };
 
-  // ➕ ADD
   const handleAdd = () => {
     if (!form.amount || !form.category) return;
-
     dispatch(
       addExpense({
         title: form.description || "No title",
@@ -55,11 +146,9 @@ const ExpensesPage: React.FC = () => {
         date: form.date || new Date().toISOString(),
       })
     );
-
     resetForm();
   };
 
-  // ✏️ EDIT (OPEN MODAL)
   const handleEdit = (exp: any) => {
     setEditingId(exp._id);
     setForm({
@@ -71,10 +160,8 @@ const ExpensesPage: React.FC = () => {
     setShowModal(true);
   };
 
-  // 🔥 UPDATE
   const handleUpdate = () => {
     if (!editingId) return;
-
     dispatch(
       updateExpense({
         id: editingId,
@@ -87,7 +174,6 @@ const ExpensesPage: React.FC = () => {
         },
       })
     );
-
     resetForm();
   };
 
@@ -97,19 +183,47 @@ const ExpensesPage: React.FC = () => {
     }
   };
 
+  /* =======================
+     TOTAL EXPENSES
+     ======================= */
+  const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4">Expenses</h1>
 
-      {/* Total */}
+      <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1>
+
+
+      {/* MONTH SELECTOR */}
+      <div className="flex gap-2 mb-6">
+        <select
+          value={selectedMonth}
+          onChange={e => setSelectedMonth(Number(e.target.value))}
+          className="border p-2 rounded"
+        >
+          {months.map((m, i) => (
+            <option key={i} value={i}>{m}</option>
+          ))}
+        </select>
+        <input
+          type="number"
+          value={selectedYear}
+          onChange={e => setSelectedYear(Number(e.target.value))}
+          className="border p-2 rounded w-28"
+        />
+      </div>
+
+      {/* TOTAL EXPENSE FOR SELECTED MONTH */}
       <div className="mb-6 bg-purple-700 text-white rounded-xl p-6 shadow">
-        <p className="text-sm opacity-80">Total Expenses</p>
+        <p className="text-sm opacity-80">
+          Total Expenses ({months[selectedMonth]} {selectedYear})
+        </p>
         <h2 className="text-3xl font-extrabold">
           {totalExpenses.toLocaleString()} LKR
         </h2>
       </div>
 
-      {/* ADD FORM */}
+      {/* ADD EXPENSE FORM */}
       <div className="mb-6 flex gap-2 flex-wrap">
         <input
           name="amount"
@@ -119,7 +233,6 @@ const ExpensesPage: React.FC = () => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
-
         <select
           name="category"
           value={form.category}
@@ -127,13 +240,10 @@ const ExpensesPage: React.FC = () => {
           className="border p-2 rounded"
         >
           <option value="">Select Category</option>
-          {categories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
+          {categories.map(c => (
+            <option key={c._id} value={c._id}>{c.name}</option>
           ))}
         </select>
-
         <input
           name="description"
           placeholder="Description"
@@ -141,7 +251,6 @@ const ExpensesPage: React.FC = () => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
-
         <input
           name="date"
           type="date"
@@ -149,7 +258,6 @@ const ExpensesPage: React.FC = () => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
-
         <button
           onClick={handleAdd}
           className="bg-blue-600 text-white px-4 rounded"
@@ -161,104 +269,123 @@ const ExpensesPage: React.FC = () => {
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* LIST */}
-      <ul className="space-y-2">
-        {expenses.map((exp) => {
-          const category = categories.find((c) => c._id === exp.category);
+      {/* EXPENSE LIST */}
+      <ul className="space-y-2 mb-10">
+        {filteredExpenses.map(exp => {
+          const category = categories.find(c => c._id === exp.category);
           return (
-            <li
-              key={exp._id}
-              className="flex justify-between items-center bg-white p-3 rounded-xl shadow"
-            >
+            <li key={exp._id} className="flex justify-between items-center bg-white p-3 rounded-xl shadow">
               <span>
-                <strong>{category?.name || "Unknown"}</strong> —{" "}
-                {exp.amount} LKR — {exp.notes} —{" "}
-                {new Date(exp.date).toLocaleDateString()}
+                <strong>{category?.name || "Unknown"}</strong> — {exp.amount} LKR — {exp.notes} — {new Date(exp.date).toLocaleDateString()}
               </span>
-
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleEdit(exp)}
-                  className="text-blue-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(exp._id)}
-                  className="text-red-500"
-                >
-                  Delete
-                </button>
+                <button onClick={() => handleEdit(exp)} className="text-blue-600">Edit</button>
+                <button onClick={() => handleDelete(exp._id)} className="text-red-500">Delete</button>
               </div>
             </li>
           );
         })}
       </ul>
 
-      {/* 🔥 MODAL */}
+      {/* MONTH SELECTOR
+      <div className="flex gap-2 mb-6">
+        <select
+          value={selectedMonth}
+          onChange={e => setSelectedMonth(Number(e.target.value))}
+          className="border p-2 rounded"
+        >
+          {months.map((m, i) => (
+            <option key={i} value={i}>{m}</option>
+          ))}
+        </select>
+        <input
+          type="number"
+          value={selectedYear}
+          onChange={e => setSelectedYear(Number(e.target.value))}
+          className="border p-2 rounded w-28"
+        />
+      </div> */}
+
+      {/* TOTAL COMPARISON */}
+      <div className="mb-8 bg-white rounded-xl p-6 shadow">
+        <p className="text-sm text-gray-500">
+          {months[selectedMonth]} vs {months[lastMonth]}
+        </p>
+        <h2 className={`text-2xl font-bold ${diffColor}`}>
+          Difference: {diff.toLocaleString()} LKR
+        </h2>
+      </div>
+
+      {/* PIE CHARTS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div className="bg-white p-6 rounded-xl shadow h-[350px]">
+          <h3 className="font-semibold mb-4">
+            {months[selectedMonth]} {selectedYear}
+          </h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={thisMonthPie}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={120}
+                label
+              >
+                {thisMonthPie.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow h-[350px]">
+          <h3 className="font-semibold mb-4">
+            {months[lastMonth]} {lastMonthYear}
+          </h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={lastMonthPie}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={120}
+                label
+              >
+                {lastMonthPie.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* EDIT MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
             <h2 className="text-xl font-bold mb-4">Edit Expense</h2>
-
             <div className="space-y-3">
-              <input
-                name="amount"
-                type="number"
-                value={form.amount}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Amount"
-              />
-
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              >
-                <option value="">Select Category</option>
-                {categories.map((c) => (
-                  <option key={c._id} value={c._id}>
-                    {c.name}
-                  </option>
-                ))}
+              <input name="amount" type="number" value={form.amount} onChange={handleChange} className="border p-2 rounded w-full" />
+              <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded w-full">
+                {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
               </select>
-
-              <input
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                placeholder="Description"
-              />
-
-              <input
-                name="date"
-                type="date"
-                value={form.date}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              />
+              <input name="description" value={form.description} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input name="date" type="date" value={form.date} onChange={handleChange} className="border p-2 rounded w-full" />
             </div>
-
             <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={resetForm}
-                className="px-4 py-2 rounded bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdate}
-                className="px-4 py-2 rounded bg-green-600 text-white"
-              >
-                Update
-              </button>
+              <button onClick={resetForm} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+              <button onClick={handleUpdate} className="px-4 py-2 bg-green-600 text-white rounded">Update</button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };
