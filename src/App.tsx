@@ -14,6 +14,7 @@ import AnalysisPage from "./pages/Analysis/AnalysisPage"
 import SavingsPage from "./pages/Savings/SavingsPage"
 import AIPage from "./pages/AI/AIPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminUsersPage from "./pages/AdminUsersPage";
 
 const App: React.FC = () => {
   return (
@@ -53,6 +54,16 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminUsersPage />
+            </ProtectedRoute>
+          }
+        />
+
 
         {/* User Categories */}
         <Route

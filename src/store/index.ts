@@ -7,6 +7,8 @@ import incomesReducer from './slices/incomes.slice';
 import savingsReducer from './slices/savingsSlice';
 import savingsGoalsReducer from './slices/savingsGoalsSlice';
 import adminReducer from "./slices/adminSlice";
+import adminUserReducer from "./slices/adminUserSlice"
+
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,7 @@ export const store = configureStore({
     savings: savingsReducer,
     savingsGoals: savingsGoalsReducer,
     admin: adminReducer,
+    adminUsers: adminUserReducer,
 
   },
 });

@@ -12,7 +12,8 @@ import {
   BarChart3,
   LogOut,
   Shield,
-  Bot   // 👈 ADD THIS
+  Bot, 
+  Users
 } from "lucide-react";
 
 const Sidebar: React.FC = () => {
@@ -69,6 +70,11 @@ const Sidebar: React.FC = () => {
                   <Link to="/categories" className={linkStyle("/categories")}>
                     <Folder size={18} /> Manage Categories
                   </Link>
+
+                  <Link to="/admin/users" className={linkStyle("/admin/users")}>
+                    <Users size={18} /> User Management
+                  </Link>
+
                 </>
               )}
 
@@ -108,6 +114,7 @@ const Sidebar: React.FC = () => {
               <Link to="/ai" className={linkStyle("/ai")}>
                  <Bot size={18} /> AI Assistant
               </Link>
+
 
             </>
           )}
