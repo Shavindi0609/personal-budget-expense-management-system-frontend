@@ -11,7 +11,8 @@ import {
   PiggyBank,
   BarChart3,
   LogOut,
-  Shield
+  Shield,
+  Bot   // 👈 ADD THIS
 } from "lucide-react";
 
 const Sidebar: React.FC = () => {
@@ -103,6 +104,11 @@ const Sidebar: React.FC = () => {
               <Link to="/analysis" className={linkStyle("/analysis")}>
                 <BarChart3 size={18} /> Analysis
               </Link>
+
+              <Link to="/ai" className={linkStyle("/ai")}>
+                 <Bot size={18} /> AI Assistant
+              </Link>
+
             </>
           )}
         </nav>

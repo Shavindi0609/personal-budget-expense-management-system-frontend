@@ -12,7 +12,7 @@ import HomePublic from "./pages/HomePublic";
 import UserCategoriesView from "./pages/Categories/UserCategoriesView";
 import AnalysisPage from "./pages/Analysis/AnalysisPage"
 import SavingsPage from "./pages/Savings/SavingsPage"
-
+import AIPage from "./pages/AI/AIPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App: React.FC = () => {
@@ -102,6 +102,16 @@ const App: React.FC = () => {
              </ProtectedRoute>
            }
            />
+
+        <Route
+          path="/ai"
+          element={
+            <ProtectedRoute>
+              <AIPage />
+            </ProtectedRoute>
+          }
+        />
+
 
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" />} />
