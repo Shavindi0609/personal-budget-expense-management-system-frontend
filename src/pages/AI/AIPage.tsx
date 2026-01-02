@@ -1,8 +1,16 @@
 import { useState } from "react";
 
+const API_BASE = "http://localhost:5001"; // move to env later
+
 const AIPage = () => {
   const [question, setQuestion] = useState("");
-  const [context, setContext] = useState("");
+  const [context, setContext] = useState(
+`Monthly Income: 120000
+Total Expenses: 90000
+Food: 30000
+Transport: 10000
+Savings Goal: Buy Laptop`
+  );
   const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,20 +26,19 @@ const AIPage = () => {
     setError("");
 
     try {
-        const response = await fetch(
-        "http://localhost:5001/api/v1/ai/chat",
+      const response = await fetch(
+        `${API_BASE}/api/v1/ai/chat`,
         {
-            method: "POST",
-            headers: {
+          method: "POST",
+          headers: {
             "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+          },
+          body: JSON.stringify({
             question,
             context,
-            }),
+          }),
         }
-        );
-
+      );
 
       const data = await response.json();
 
@@ -70,12 +77,11 @@ const AIPage = () => {
       {/* Context */}
       <div className="mb-4">
         <label className="block font-medium mb-2">
-          Financial Context (optional)
+          Financial Context
         </label>
         <textarea
-          rows={4}
+          rows={6}
           className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          placeholder="Monthly income, expenses, goals, etc."
           value={context}
           onChange={(e) => setContext(e.target.value)}
         />
@@ -103,9 +109,9 @@ const AIPage = () => {
           <h2 className="font-semibold text-lg mb-3 text-gray-700">
             AI Advice
           </h2>
-          <p className="whitespace-pre-line text-gray-800">
+          <div className="whitespace-pre-line text-gray-800 leading-relaxed">
             {reply}
-          </p>
+          </div>
         </div>
       )}
     </div>
