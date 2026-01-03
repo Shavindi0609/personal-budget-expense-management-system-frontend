@@ -14,12 +14,7 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Legend
 } from "recharts";
 
 const months = [
@@ -106,21 +101,6 @@ const ExpensesPage: React.FC = () => {
   const diff = thisTotal - lastTotal;
   const diffColor = diff > 0 ? "text-red-600" : "text-green-600";
 
-  /* =======================
-     MONTH-WISE BAR CHART
-     ======================= */
-  const monthChartData = expenses.reduce((acc: any[], exp) => {
-    const d = new Date(exp.date);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
-    const monthLabel = `${months[d.getMonth()]} ${d.getFullYear()}`;
-    const existing = acc.find(i => i.key === key);
-    if (existing) {
-      existing.total += exp.amount;
-    } else {
-      acc.push({ key, month: monthLabel, total: exp.amount });
-    }
-    return acc;
-  }, []);
 
   /* =======================
      FORM HANDLERS

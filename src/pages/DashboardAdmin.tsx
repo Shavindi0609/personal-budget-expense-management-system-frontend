@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import { Users, Folder, TrendingDown, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchAdminStats } from "../store/slices/adminSlice";
 

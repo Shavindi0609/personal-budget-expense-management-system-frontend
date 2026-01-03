@@ -9,92 +9,107 @@ import {
 
 const AdminUsersPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { items, loading } = useAppSelector((s) => s.adminUsers);
+  const { items, loading, error } = useAppSelector((s) => s.adminUsers);
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
+  const handleToggleRole = (id: string, role: "user" | "admin") => {
+    dispatch(updateUserRole({ id, role: role === "admin" ? "user" : "admin" }));
+  };
+
+  const handleToggleBlock = (id: string) => {
+    dispatch(toggleBlockUser(id));
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      dispatch(deleteUser(id));
+    }
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4">User Management</h2>
+    <div className="bg-[#f4f7ff] min-h-screen p-6">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">User Management</h1>
 
-      <div className="bg-white rounded shadow overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 text-left">Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th className="text-right pr-4">Actions</th>
-            </tr>
-          </thead>
+        {/* Loading / Error */}
+        {loading && <p className="text-gray-600 mb-4">Loading users...</p>}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
-          <tbody>
-            {loading ? (
+        {/* Users Table */}
+        <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-purple-700 text-white">
               <tr>
-                <td colSpan={5} className="p-4 text-center">
-                  Loading...
-                </td>
+                <th className="px-6 py-3 text-left text-sm font-medium">#</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Name</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Role</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Status</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Actions</th>
               </tr>
-            ) : (
-              items.map((u) => (
-                <tr key={u._id} className="border-t">
-                  <td className="p-3">{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {items.map((user, idx) => (
+                <tr key={user._id} className="hover:bg-gray-100">
+                  <td className="px-6 py-4 text-sm">{idx + 1}</td>
+                  <td className="px-6 py-4 text-sm">{user.name}</td>
+                  <td className="px-6 py-4 text-sm">{user.email}</td>
+                  <td className="px-6 py-4 text-sm">
                     <span
                       className={`px-2 py-1 rounded text-sm ${
-                        u.role === "admin"
+                        user.role === "admin"
                           ? "bg-purple-100 text-purple-700"
                           : "bg-blue-100 text-blue-700"
                       }`}
                     >
-                      {u.role}
+                      {user.role}
                     </span>
                   </td>
-                  <td>
-                    {u.isBlocked ? (
-                      <span className="text-red-600">Blocked</span>
+                  <td className="px-6 py-4 text-sm">
+                    {user.isBlocked ? (
+                      <span className="text-red-600 font-medium">Blocked</span>
                     ) : (
-                      <span className="text-green-600">Active</span>
+                      <span className="text-green-600 font-medium">Active</span>
                     )}
                   </td>
-                  <td className="text-right space-x-2 pr-4">
+                  <td className="px-6 py-4 text-sm flex flex-wrap gap-2">
                     <button
-                      onClick={() =>
-                        dispatch(
-                          updateUserRole({
-                            id: u._id,
-                            role: u.role === "admin" ? "user" : "admin",
-                          })
-                        )
-                      }
-                      className="px-3 py-1 bg-blue-600 text-white rounded"
+                      onClick={() => handleToggleRole(user._id, user.role)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
                     >
                       Toggle Role
                     </button>
-
                     <button
-                      onClick={() => dispatch(toggleBlockUser(u._id))}
-                      className="px-3 py-1 bg-yellow-500 text-white rounded"
+                      onClick={() => handleToggleBlock(user._id)}
+                      className={`px-3 py-1 rounded text-white ${
+                        user.isBlocked ? "bg-green-500 hover:bg-green-600" : "bg-yellow-500 hover:bg-yellow-600"
+                      }`}
                     >
-                      {u.isBlocked ? "Unblock" : "Block"}
+                      {user.isBlocked ? "Unblock" : "Block"}
                     </button>
-
                     <button
-                      onClick={() => dispatch(deleteUser(u._id))}
-                      className="px-3 py-1 bg-red-600 text-white rounded"
+                      onClick={() => handleDelete(user._id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+
+              {items.length === 0 && !loading && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                    No users found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

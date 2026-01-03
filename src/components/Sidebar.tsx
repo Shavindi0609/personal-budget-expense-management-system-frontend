@@ -95,12 +95,13 @@ const Sidebar: React.FC = () => {
               )}
 
               {/* COMMON */}
-              <Link to="/expenses" className={linkStyle("/expenses")}>
-                <Wallet size={18} /> Expenses
-              </Link>
 
               <Link to="/incomes" className={linkStyle("/incomes")}>
                 <TrendingUp size={18} /> Incomes
+              </Link>
+
+              <Link to="/expenses" className={linkStyle("/expenses")}>
+                <Wallet size={18} /> Expenses
               </Link>
 
               <Link to="/savings" className={linkStyle("/savings")}>
