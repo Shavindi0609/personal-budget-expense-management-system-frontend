@@ -15,6 +15,7 @@ import SavingsPage from "./pages/Savings/SavingsPage"
 import AIPage from "./pages/AI/AIPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminUsersPage from "./pages/AdminUsersPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App: React.FC = () => {
   return (
@@ -119,6 +120,15 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <AIPage />
+            </ProtectedRoute>
+          }
+        />
+
+                <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

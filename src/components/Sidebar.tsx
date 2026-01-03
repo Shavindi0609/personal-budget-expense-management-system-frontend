@@ -13,7 +13,8 @@ import {
   LogOut,
   Shield,
   Bot, 
-  Users
+  Users,
+  User
 } from "lucide-react";
 
 const Sidebar: React.FC = () => {
@@ -115,6 +116,11 @@ const Sidebar: React.FC = () => {
               <Link to="/ai" className={linkStyle("/ai")}>
                  <Bot size={18} /> AI Assistant
               </Link>
+
+              <Link to="/profile" className={linkStyle("/profile")}>
+                <User size={18} /> My Profile
+              </Link>
+
 
 
             </>
