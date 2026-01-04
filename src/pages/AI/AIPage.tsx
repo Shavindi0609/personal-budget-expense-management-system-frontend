@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Sidebar from "../../components/Sidebar";
 
 const API_BASE = "http://localhost:5001"; // move to env later
 
@@ -55,65 +56,80 @@ Savings Goal: Buy Laptop`
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-purple-700 mb-6">
-        🤖 AI Finance Assistant
-      </h1>
+    <div className="flex min-h-screen bg-[#f4f7ff]">
+      {/* SIDEBAR */}
+      <Sidebar />
 
-      {/* Question */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">
-          Your Question
-        </label>
-        <textarea
-          rows={3}
-          className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          placeholder="e.g. How can I save more money this month?"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
-      </div>
+      {/* MAIN CONTENT */}
+      <main className="flex-1 p-6">
+        <div className="max-w-4xl mx-auto">
 
-      {/* Context */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">
-          Financial Context
-        </label>
-        <textarea
-          rows={6}
-          className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          value={context}
-          onChange={(e) => setContext(e.target.value)}
-        />
-      </div>
-
-      {/* Button */}
-      <button
-        onClick={handleAskAI}
-        disabled={loading}
-        className="bg-purple-600 text-white px-6 py-2 rounded-xl hover:bg-purple-700 transition disabled:opacity-50"
-      >
-        {loading ? "Thinking..." : "Ask AI"}
-      </button>
-
-      {/* Error */}
-      {error && (
-        <div className="mt-4 text-red-600 font-medium">
-          {error}
-        </div>
-      )}
-
-      {/* Reply */}
-      {reply && (
-        <div className="mt-6 bg-white shadow rounded-xl p-5">
-          <h2 className="font-semibold text-lg mb-3 text-gray-700">
-            AI Advice
-          </h2>
-          <div className="whitespace-pre-line text-gray-800 leading-relaxed">
-            {reply}
+          {/* HEADER */}
+          <div className="bg-purple-700 text-white rounded-xl p-6 shadow-md mb-8">
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              🤖 AI Finance Assistant
+            </h1>
+            <p className="text-purple-100 text-sm mt-1">
+              Ask smart questions and get personalized financial advice
+            </p>
           </div>
+
+          {/* QUESTION */}
+          <div className="mb-6">
+            <label className="block font-medium text-gray-700 mb-2">
+              Your Question
+            </label>
+            <textarea
+              rows={3}
+              className="w-full border rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              placeholder="e.g. How can I save more money this month?"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </div>
+
+          {/* CONTEXT */}
+          <div className="mb-6">
+            <label className="block font-medium text-gray-700 mb-2">
+              Financial Context
+            </label>
+            <textarea
+              rows={6}
+              className="w-full border rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+            />
+          </div>
+
+          {/* BUTTON */}
+          <button
+            onClick={handleAskAI}
+            disabled={loading}
+            className="bg-purple-600 text-white px-8 py-3 rounded-xl hover:bg-purple-700 transition disabled:opacity-50 shadow"
+          >
+            {loading ? "Thinking..." : "Ask AI"}
+          </button>
+
+          {/* ERROR */}
+          {error && (
+            <div className="mt-4 text-red-600 font-medium">
+              {error}
+            </div>
+          )}
+
+          {/* REPLY */}
+          {reply && (
+            <div className="mt-8 bg-white shadow rounded-xl p-6">
+              <h2 className="font-semibold text-lg mb-3 text-gray-700">
+                💡 AI Advice
+              </h2>
+              <div className="whitespace-pre-line text-gray-800 leading-relaxed">
+                {reply}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </main>
     </div>
   );
 };
