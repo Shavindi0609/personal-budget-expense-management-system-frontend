@@ -149,6 +149,9 @@ const AnalysisPage: React.FC = () => {
 
   return (
     <div className="p-6 space-y-10">
+          <h1 className="text-3xl font-bold text-purple-700 mb-6">
+            Analysis
+          </h1>
       {/* ---------- CONTROLS ---------- */}
       <div className="flex flex-wrap gap-4">
         <input
@@ -166,7 +169,7 @@ const AnalysisPage: React.FC = () => {
       </div>
 
       <div id="analysis-report">
-        <h1 className="text-3xl font-bold mb-6">Analysis</h1>
+
 
         {/* ---------- SUMMARY CARDS ---------- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
