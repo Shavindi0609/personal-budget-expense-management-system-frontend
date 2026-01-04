@@ -161,7 +161,7 @@ const ExpensesPage: React.FC = () => {
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1>
+          {/* <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1> */}
 
           {/* MONTH SELECT */}
           <div className="flex gap-2 mb-6">

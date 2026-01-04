@@ -94,7 +94,7 @@ const IncomesPage: React.FC = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* HEADER */}
-          <h2 className="text-2xl font-semibold mb-4">Incomes</h2>
+          {/* <h2 className="text-2xl font-semibold mb-4">Incomes</h2> */}
 
           {/* MONTH SELECTOR */}
           <div className="flex gap-3 mb-4">

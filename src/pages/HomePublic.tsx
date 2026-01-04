@@ -47,53 +47,16 @@ const HomePublic: React.FC = () => {
           </div>
 
           
-          {/* RIGHT SIDE MOCKUP */}
-{/* RIGHT SIDE HERO MOCKUP */}
-<div className="relative flex justify-center items-center w-full h-[500px] md:h-[550px]">
-  
-  {/* Background image - moved slightly to the right */}
-  <div className="absolute inset-0 flex justify-center items-center">
-    <img
-      src="/mnt/data/8b701540-c4c4-4588-b672-701cbe2ec082.png"
-      alt="People using app"
-      className="rounded-3xl shadow-xl object-cover w-[300px] md:w-[350px] h-[400px] md:h-[450px] z-0 translate-x-10 md:translate-x-16"
-    />
-  </div>
-
-  {/* Phone mockup - moved slightly to the left */}
-  <div className="relative z-10 w-[200px] md:w-[250px] h-[400px] md:h-[500px] bg-white rounded-3xl shadow-2xl overflow-hidden flex justify-center items-center -translate-x-10 md:-translate-x-16">
-    <img
-      src="https://i.imgur.com/Mx1mM3S.png"
-      alt="App Mockup"
-      className="w-full h-full object-cover"
-    />
-
-    {/* Overlay Goal card */}
-    <div className="absolute top-5 right-[-60px] w-36 bg-white shadow-lg rounded-xl p-3">
-      <h4 className="text-sm font-semibold text-gray-700">Goals</h4>
-      <div className="mt-2 text-xs text-gray-500 space-y-1">
-        <p>🏖️ Vacation</p>
-        <p>🎓 Masters Degree</p>
-        <p>🏠 Rental Property</p>
-      </div>
-    </div>
-
-    {/* Overlay Budget card */}
-    <div className="absolute bottom-5 left-[-60px] w-36 bg-white shadow-lg rounded-xl p-3">
-      <h4 className="text-sm font-semibold text-gray-700">Budget</h4>
-      <p className="text-xs text-gray-500 mt-1">Planned: $10,548</p>
-      <p className="text-xs text-gray-500">Spent: $6,856</p>
-      <div className="h-2 bg-purple-200 rounded-full mt-2">
-        <div className="h-2 bg-purple-700 rounded-full w-2/3"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
+        {/* RIGHT SIDE HERO VIDEO ONLY */}
+          <div className="relative flex justify-center items-center w-full h-[500px] md:h-[550px]">
+            <video
+              src="https://res.cloudinary.com/dm4qd5n2c/video/upload/v1767512389/7687827-uhd_2160_3840_30fps_pwy5m6.mp4"
+              autoPlay
+              loop
+              muted
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
         </div>
       </div>
 
@@ -341,7 +304,7 @@ const HomePublic: React.FC = () => {
       <div className="md:col-span-1 flex justify-center">
         <div className="relative w-[240px] h-[320px] rounded-3xl overflow-hidden shadow-xl">
           <img
-            src="/mnt/data/387fe245-cbed-4b51-b33c-6966d33230c9.png"
+            src="https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767513966/pexels-leish-6975184_v1rhtt.jpg"
             alt="Happy users"
             className="w-full h-full object-cover"
           />
@@ -349,6 +312,7 @@ const HomePublic: React.FC = () => {
           <div className="absolute inset-0 border-2 border-white/40 rounded-3xl"></div>
         </div>
       </div>
+
 
       {/* Card 3 */}
       <div className="bg-white rounded-2xl shadow-md p-6 text-left">
@@ -407,21 +371,21 @@ const HomePublic: React.FC = () => {
           title: "SARAH’S STORY",
           text:
             "I finally understand where my money goes every month. Budgeting doesn’t feel stressful anymore.",
-          img: "/images/user1.jpg",
+          img: "https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767515231/pexels-anthonyshkraba-production-8374321_avboii.jpg",
         },
         {
           name: "James L.",
           title: "JAMES’ STORY",
           text:
             "FinWise helped me stay consistent. Seeing categories clearly changed everything for me.",
-          img: "/images/user2.jpg",
+          img: "https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767514279/pexels-creationhill-1681010_vzv9qm.jpg",
         },
         {
           name: "Anusha P.",
           title: "ANUSHA’S STORY",
           text:
             "I never thought tracking expenses could feel this simple and motivating.",
-          img: "/images/user3.jpg",
+          img: "https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767515078/pexels-giovanna-kamimura-399616174-33485275_bcvy5n.jpg",
         },
       ].map((t, i) => (
         <div

@@ -62,7 +62,7 @@ const SavingsPage: React.FC = () => {
       <main className="flex-1 p-6">
         <div className="max-w-6xl mx-auto space-y-8">
 
-          <h1 className="text-3xl font-bold">Savings</h1>
+          {/* <h1 className="text-3xl font-bold">Savings</h1> */}
 
           {/* ================= MONTH PICKER ================= */}
           <input
