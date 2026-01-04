@@ -24,28 +24,56 @@ const Register: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
+  setError("");
 
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+  // Name validation
+  if (form.name.trim().length < 2) {
+    setError("Name must be at least 2 characters");
+    return;
+  }
 
-    try {
-      const res = await api.post("/auth/register", {
-        name: form.name,
-        email: form.email,
-        password: form.password,
-      });
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(form.email)) {
+    setError("Please enter a valid email address");
+    return;
+  }
 
-      dispatch(setToken(res.data.accessToken));
-      if (res.data.user) dispatch(setUser(res.data.user));
+  // Password validation
+  if (form.password.length < 8) {
+    setError("Password must be at least 8 characters long");
+    return;
+  }
 
-      navigate("/login");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
-    }
-  };
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
+  if (!passwordRegex.test(form.password)) {
+    setError("Password must contain at least one letter and one number");
+    return;
+  }
+
+  // Confirm password validation
+  if (form.password !== form.confirmPassword) {
+    setError("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await api.post("/auth/register", {
+      name: form.name,
+      email: form.email,
+      password: form.password,
+    });
+
+    dispatch(setToken(res.data.accessToken));
+    if (res.data.user) dispatch(setUser(res.data.user));
+
+    navigate("/login");
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Registration failed");
+  }
+};
+
 
   return (
     <div className="bg-[#f4f7ff] min-h-screen">
@@ -130,10 +158,17 @@ const Register: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition duration-200"
+              disabled={
+                !form.name ||
+                !form.email ||
+                !form.password ||
+                !form.confirmPassword
+              }
+              className="w-full bg-purple-700 disabled:bg-gray-400 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition"
             >
               Create Account
             </button>
+
           </form>
         </div>
       </div>

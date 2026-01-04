@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import ProfilePage from "./pages/ProfilePage";
 
+
 const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
