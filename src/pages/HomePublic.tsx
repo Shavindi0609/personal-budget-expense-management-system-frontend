@@ -434,7 +434,7 @@ const HomePublic: React.FC = () => {
 <section className="bg-[#e9edff] py-24">
   <div className="max-w-4xl mx-auto px-6">
     <h2 className="text-4xl font-extrabold text-center mb-12">
-      Frequently Asked Questions
+      Frequently Asked <span className="text-purple-700">Questions </span>
     </h2>
 
     <div className="space-y-6">

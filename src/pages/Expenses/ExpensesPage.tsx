@@ -102,19 +102,50 @@ const ExpensesPage: React.FC = () => {
     setShowModal(false);
   };
 
-  const handleAdd = () => {
-    if (!form.amount || !form.category) return;
-    dispatch(
-      addExpense({
-        title: form.description || "No title",
-        amount: Number(form.amount),
-        category: form.category,
-        notes: form.description,
-        date: form.date || new Date().toISOString(),
-      })
+  // Component body එකේ
+const totalIncome = useAppSelector((s) => 
+  s.incomes.items
+    .filter(i => {
+      const d = new Date(i.date);
+      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+    })
+    .reduce((sum, i) => sum + i.amount, 0)
+);
+
+// Component body එකේ (ExpensesPage) hook section එකේ, totalExpenses එකට ලඟ
+const totalExpenses = filteredExpenses.reduce((s, e) => s + e.amount, 0);
+
+
+// Available balance
+const availableBalance = totalIncome - totalExpenses;
+
+
+const handleAdd = () => {
+  if (!form.amount || !form.category) return;
+
+  const newAmount = Number(form.amount);
+
+  if (newAmount > availableBalance) {
+    alert(
+      `Warning! Adding this expense exceeds your available balance of ${availableBalance.toLocaleString()} LKR.`
     );
-    resetForm();
-  };
+    return;
+  }
+
+  dispatch(
+    addExpense({
+      title: form.description || "No title",
+      amount: newAmount,
+      category: form.category,
+      notes: form.description,
+      date: form.date || new Date().toISOString(),
+    })
+  );
+
+  resetForm();
+};
+
+
 
   const handleEdit = (exp: any) => {
     setEditingId(exp._id);
@@ -150,7 +181,6 @@ const ExpensesPage: React.FC = () => {
     }
   };
 
-  const totalExpenses = filteredExpenses.reduce((s, e) => s + e.amount, 0);
 
   return (
     <div className="flex min-h-screen bg-[#f4f7ff]">
@@ -191,6 +221,9 @@ const ExpensesPage: React.FC = () => {
             <h2 className="text-3xl font-extrabold">
               {totalExpenses.toLocaleString()} LKR
             </h2>
+              <p className="text-sm mt-2 opacity-90">
+                Available Balance: {availableBalance.toLocaleString()} LKR
+              </p>
           </div>
 
           {/* ADD FORM */}
