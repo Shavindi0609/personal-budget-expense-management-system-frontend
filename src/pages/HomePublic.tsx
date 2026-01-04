@@ -49,14 +49,41 @@ const HomePublic: React.FC = () => {
           
         {/* RIGHT SIDE HERO VIDEO ONLY */}
           <div className="relative flex justify-center items-center w-full h-[500px] md:h-[550px]">
-            <video
-              src="https://res.cloudinary.com/dm4qd5n2c/video/upload/v1767512389/7687827-uhd_2160_3840_30fps_pwy5m6.mp4"
-              autoPlay
-              loop
-              muted
-              className="w-full h-full object-cover rounded-3xl shadow-2xl"
-            />
-          </div>
+
+  {/* Glow blobs */}
+  <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-400 rounded-full blur-3xl opacity-30"></div>
+  <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-400 rounded-full blur-3xl opacity-30"></div>
+
+  {/* Video */}
+  <video
+    src="https://res.cloudinary.com/dm4qd5n2c/video/upload/v1767512389/7687827-uhd_2160_3840_30fps_pwy5m6.mp4"
+    autoPlay
+    loop
+    muted
+    className="relative z-10 w-full h-full object-cover rounded-3xl shadow-2xl"
+  />
+
+  {/* Gradient overlay */}
+  <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-purple-700/30 via-transparent to-indigo-500/20 z-20"></div>
+
+  {/* Live badge */}
+  <div className="absolute top-6 left-6 z-30 bg-purple-700 text-white px-4 py-2 rounded-full text-sm shadow">
+    ▶ Live Preview
+  </div>
+
+  {/* Floating stats */}
+  <div className="absolute bottom-6 left-6 z-30 bg-white/80 backdrop-blur-md rounded-2xl px-5 py-4 shadow-lg">
+    <p className="text-xs text-gray-500">Monthly Savings</p>
+    <p className="text-xl font-bold text-purple-700">+$1,240</p>
+  </div>
+
+  <div className="absolute top-6 right-6 z-30 bg-white/80 backdrop-blur-md rounded-2xl px-5 py-4 shadow-lg">
+    <p className="text-xs text-gray-500">Budget Used</p>
+    <p className="text-lg font-semibold text-gray-900">62%</p>
+  </div>
+
+</div>
+
         </div>
       </div>
 

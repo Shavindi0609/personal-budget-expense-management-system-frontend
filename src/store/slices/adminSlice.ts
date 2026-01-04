@@ -1,11 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axiosClient";
 
-interface AdminStats {
+/* ---------------- TYPES ---------------- */
+
+export interface MonthlyStat {
+  month: string;   // e.g. "Jan"
+  income: number;
+  expense: number;
+}
+
+export interface AdminStats {
   users: number;
   categories: number;
   expenses: number;
   incomes: number;
+  monthly: MonthlyStat[];
 }
 
 interface AdminState {
@@ -13,19 +22,28 @@ interface AdminState {
   loading: boolean;
 }
 
+/* ---------------- INITIAL STATE ---------------- */
+
 const initialState: AdminState = {
   stats: null,
   loading: false,
 };
 
-// Async thunk to fetch stats
-export const fetchAdminStats = createAsyncThunk(
+/* ---------------- ASYNC THUNK ---------------- */
+
+export const fetchAdminStats = createAsyncThunk<
+  any,
+  number
+>(
   "admin/stats",
-  async () => {
-    const res = await api.get("/admin/stats");
+  async (year) => {
+    const res = await api.get(`/admin/stats?year=${year}`);
     return res.data;
   }
 );
+
+
+/* ---------------- SLICE ---------------- */
 
 const adminSlice = createSlice({
   name: "admin",
