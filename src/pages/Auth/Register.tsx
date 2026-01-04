@@ -74,6 +74,15 @@ const Register: React.FC = () => {
   }
 };
 
+const getPasswordStrength = () => {
+  if (form.password.length < 8) return "Weak";
+  if (/^(?=.*[A-Za-z])(?=.*\d).+$/.test(form.password)) return "Strong";
+  return "Medium";
+};
+
+const [showPassword, setShowPassword] = useState(false);
+
+
 
   return (
     <div className="bg-[#f4f7ff] min-h-screen">
@@ -101,7 +110,7 @@ const Register: React.FC = () => {
           <form onSubmit={handleSubmit} className="mt-6 space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Name
+                👤 Name
               </label>
               <input
                 name="name"
@@ -115,7 +124,7 @@ const Register: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Email
+                📧 Email
               </label>
               <input
                 type="email"
@@ -130,16 +139,42 @@ const Register: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Password
+                🔒 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
-                required
-              />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="mt-1 w-full border rounded-xl px-4 py-2"
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-xs text-purple-700 mt-1"
+            >
+              {showPassword ? "Hide password" : "Show password"}
+            </button>
+
+              {form.password && (
+                <p className="text-sm mt-1 text-gray-600">
+                  Password strength:{" "}
+                  <span
+                    className={
+                      getPasswordStrength() === "Strong"
+                        ? "text-green-600"
+                        : getPasswordStrength() === "Medium"
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }
+                  >
+                    {getPasswordStrength()}
+                  </span>
+                </p>
+              )}
+
             </div>
 
             <div>

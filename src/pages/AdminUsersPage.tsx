@@ -1,5 +1,5 @@
 // pages/AdminUsersPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   fetchUsers,
@@ -12,6 +12,10 @@ import Sidebar from "../components/Sidebar";
 const AdminUsersPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, loading, error } = useAppSelector((s) => s.adminUsers);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -31,17 +35,42 @@ const AdminUsersPage: React.FC = () => {
     }
   };
 
+  // 🔍 Search filter
+  const filteredUsers = items.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // 📄 Pagination
+  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
   return (
     <div className="flex min-h-screen bg-[#f4f7ff]">
-      {/* SIDEBAR */}
       <Sidebar />
 
-      {/* MAIN CONTENT */}
       <main className="flex-1 p-6">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-6">
             User Management
           </h1>
+
+          {/* SEARCH */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // reset page on search
+              }}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
           {/* Loading / Error */}
           {loading && <p className="text-gray-600 mb-4">Loading users...</p>}
@@ -61,9 +90,9 @@ const AdminUsersPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {items.map((user, idx) => (
+                {paginatedUsers.map((user, idx) => (
                   <tr key={user._id} className="hover:bg-gray-100">
-                    <td className="px-6 py-4 text-sm">{idx + 1}</td>
+                    <td className="px-6 py-4 text-sm">{startIndex + idx + 1}</td>
                     <td className="px-6 py-4 text-sm">{user.name}</td>
                     <td className="px-6 py-4 text-sm">{user.email}</td>
                     <td className="px-6 py-4 text-sm">
@@ -111,7 +140,7 @@ const AdminUsersPage: React.FC = () => {
                   </tr>
                 ))}
 
-                {items.length === 0 && !loading && (
+                {filteredUsers.length === 0 && !loading && (
                   <tr>
                     <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
                       No users found.
@@ -120,6 +149,39 @@ const AdminUsersPage: React.FC = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* PAGINATION */}
+          <div className="flex justify-center items-center gap-2 mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === i + 1
+                    ? "bg-purple-700 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         </div>
       </main>
