@@ -7,6 +7,7 @@ import {
   updateExpense,
 } from "../../store/slices/expensesSlice";
 import { fetchCategories } from "../../store/slices/categoriesSlice";
+import Sidebar from "../../components/Sidebar";
 
 import {
   ResponsiveContainer,
@@ -14,7 +15,7 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend
+  Legend,
 } from "recharts";
 
 const months = [
@@ -51,20 +52,13 @@ const ExpensesPage: React.FC = () => {
     dispatch(fetchExpenses());
   }, [dispatch]);
 
-  /* =======================
-     FILTER (MONTH + YEAR)
-     ======================= */
+  /* FILTER */
   const filteredExpenses = expenses.filter(exp => {
     const d = new Date(exp.date);
-    return (
-      d.getMonth() === selectedMonth &&
-      d.getFullYear() === selectedYear
-    );
+    return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
   });
 
-  /* =======================
-     THIS & LAST MONTH EXPENSES
-     ======================= */
+  /* MONTH DATA */
   const getMonthExpenses = (month: number, year: number) =>
     expenses.filter(e => {
       const d = new Date(e.date);
@@ -76,9 +70,7 @@ const ExpensesPage: React.FC = () => {
   const lastMonthYear = selectedMonth === 0 ? selectedYear - 1 : selectedYear;
   const lastMonthExpenses = getMonthExpenses(lastMonth, lastMonthYear);
 
-  /* =======================
-     PIE CHART DATA
-     ======================= */
+  /* PIE DATA */
   const buildPieData = (list: any[]) => {
     const map: any = {};
     list.forEach(e => {
@@ -93,18 +85,13 @@ const ExpensesPage: React.FC = () => {
   const thisMonthPie = buildPieData(thisMonthExpenses);
   const lastMonthPie = buildPieData(lastMonthExpenses);
 
-  /* =======================
-     TOTALS & DIFF
-     ======================= */
+  /* TOTALS */
   const thisTotal = thisMonthExpenses.reduce((s, e) => s + e.amount, 0);
   const lastTotal = lastMonthExpenses.reduce((s, e) => s + e.amount, 0);
   const diff = thisTotal - lastTotal;
   const diffColor = diff > 0 ? "text-red-600" : "text-green-600";
 
-
-  /* =======================
-     FORM HANDLERS
-     ======================= */
+  /* FORM */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -163,187 +150,122 @@ const ExpensesPage: React.FC = () => {
     }
   };
 
-  /* =======================
-     TOTAL EXPENSES
-     ======================= */
-  const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalExpenses = filteredExpenses.reduce((s, e) => s + e.amount, 0);
 
   return (
-    <div className="p-6">
+    <div className="flex min-h-screen bg-[#f4f7ff]">
+      {/* SIDEBAR */}
+      <Sidebar />
 
-      <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1>
+      {/* MAIN */}
+      <main className="flex-1 p-6">
+        <div className="max-w-7xl mx-auto">
 
+          <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1>
 
-      {/* MONTH SELECTOR */}
-      <div className="flex gap-2 mb-6">
-        <select
-          value={selectedMonth}
-          onChange={e => setSelectedMonth(Number(e.target.value))}
-          className="border p-2 rounded"
-        >
-          {months.map((m, i) => (
-            <option key={i} value={i}>{m}</option>
-          ))}
-        </select>
-        <input
-          type="number"
-          value={selectedYear}
-          onChange={e => setSelectedYear(Number(e.target.value))}
-          className="border p-2 rounded w-28"
-        />
-      </div>
+          {/* MONTH SELECT */}
+          <div className="flex gap-2 mb-6">
+            <select
+              value={selectedMonth}
+              onChange={e => setSelectedMonth(Number(e.target.value))}
+              className="border p-2 rounded"
+            >
+              {months.map((m, i) => (
+                <option key={i} value={i}>{m}</option>
+              ))}
+            </select>
 
-      {/* TOTAL EXPENSE FOR SELECTED MONTH */}
-      <div className="mb-6 bg-purple-700 text-white rounded-xl p-6 shadow">
-        <p className="text-sm opacity-80">
-          Total Expenses ({months[selectedMonth]} {selectedYear})
-        </p>
-        <h2 className="text-3xl font-extrabold">
-          {totalExpenses.toLocaleString()} LKR
-        </h2>
-      </div>
+            <input
+              type="number"
+              value={selectedYear}
+              onChange={e => setSelectedYear(Number(e.target.value))}
+              className="border p-2 rounded w-28"
+            />
+          </div>
 
-      {/* ADD EXPENSE FORM */}
-      <div className="mb-6 flex gap-2 flex-wrap">
-        <input
-          name="amount"
-          type="number"
-          placeholder="Amount"
-          value={form.amount}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        >
-          <option value="">Select Category</option>
-          {categories.map(c => (
-            <option key={c._id} value={c._id}>{c.name}</option>
-          ))}
-        </select>
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <input
-          name="date"
-          type="date"
-          value={form.date}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <button
-          onClick={handleAdd}
-          className="bg-blue-600 text-white px-4 rounded"
-        >
-          Add
-        </button>
-      </div>
+          {/* TOTAL */}
+          <div className="mb-6 bg-purple-700 text-white rounded-xl p-6 shadow">
+            <p className="text-sm opacity-80">
+              Total Expenses ({months[selectedMonth]} {selectedYear})
+            </p>
+            <h2 className="text-3xl font-extrabold">
+              {totalExpenses.toLocaleString()} LKR
+            </h2>
+          </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+          {/* ADD FORM */}
+          <div className="mb-6 flex gap-2 flex-wrap">
+            <input name="amount" type="number" placeholder="Amount" value={form.amount} onChange={handleChange} className="border p-2 rounded" />
+            <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded">
+              <option value="">Select Category</option>
+              {categories.map(c => (
+                <option key={c._id} value={c._id}>{c.name}</option>
+              ))}
+            </select>
+            <input name="description" placeholder="Description" value={form.description} onChange={handleChange} className="border p-2 rounded" />
+            <input name="date" type="date" value={form.date} onChange={handleChange} className="border p-2 rounded" />
+            <button onClick={handleAdd} className="bg-blue-600 text-white px-4 rounded">
+              Add
+            </button>
+          </div>
 
-      {/* EXPENSE LIST */}
-      <ul className="space-y-2 mb-10">
-        {filteredExpenses.map(exp => {
-          const category = categories.find(c => c._id === exp.category);
-          return (
-            <li key={exp._id} className="flex justify-between items-center bg-white p-3 rounded-xl shadow">
-              <span>
-                <strong>{category?.name || "Unknown"}</strong> — {exp.amount} LKR — {exp.notes} — {new Date(exp.date).toLocaleDateString()}
-              </span>
-              <div className="flex gap-3">
-                <button onClick={() => handleEdit(exp)} className="text-blue-600">Edit</button>
-                <button onClick={() => handleDelete(exp._id)} className="text-red-500">Delete</button>
+          {loading && <p>Loading...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+
+          {/* LIST */}
+          <ul className="space-y-2 mb-10">
+            {filteredExpenses.map(exp => {
+              const category = categories.find(c => c._id === exp.category);
+              return (
+                <li key={exp._id} className="flex justify-between items-center bg-white p-3 rounded-xl shadow">
+                  <span>
+                    <strong>{category?.name || "Unknown"}</strong> — {exp.amount} LKR — {exp.notes}
+                  </span>
+                  <div className="flex gap-3">
+                    <button onClick={() => handleEdit(exp)} className="text-blue-600">Edit</button>
+                    <button onClick={() => handleDelete(exp._id)} className="text-red-500">Delete</button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* COMPARISON */}
+          <div className="mb-8 bg-white rounded-xl p-6 shadow">
+            <p className="text-sm text-gray-500">
+              {months[selectedMonth]} vs {months[lastMonth]}
+            </p>
+            <h2 className={`text-2xl font-bold ${diffColor}`}>
+              Difference: {diff.toLocaleString()} LKR
+            </h2>
+          </div>
+
+          {/* PIE CHARTS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[thisMonthPie, lastMonthPie].map((data, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-xl shadow h-[350px]">
+                <h3 className="font-semibold mb-4">
+                  {idx === 0
+                    ? `${months[selectedMonth]} ${selectedYear}`
+                    : `${months[lastMonth]} ${lastMonthYear}`}
+                </h3>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={data} dataKey="value" nameKey="name" outerRadius={120} label>
+                      {data.map((_, i) => (
+                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-            </li>
-          );
-        })}
-      </ul>
+            ))}
+          </div>
 
-      {/* MONTH SELECTOR
-      <div className="flex gap-2 mb-6">
-        <select
-          value={selectedMonth}
-          onChange={e => setSelectedMonth(Number(e.target.value))}
-          className="border p-2 rounded"
-        >
-          {months.map((m, i) => (
-            <option key={i} value={i}>{m}</option>
-          ))}
-        </select>
-        <input
-          type="number"
-          value={selectedYear}
-          onChange={e => setSelectedYear(Number(e.target.value))}
-          className="border p-2 rounded w-28"
-        />
-      </div> */}
-
-      {/* TOTAL COMPARISON */}
-      <div className="mb-8 bg-white rounded-xl p-6 shadow">
-        <p className="text-sm text-gray-500">
-          {months[selectedMonth]} vs {months[lastMonth]}
-        </p>
-        <h2 className={`text-2xl font-bold ${diffColor}`}>
-          Difference: {diff.toLocaleString()} LKR
-        </h2>
-      </div>
-
-      {/* PIE CHARTS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-        <div className="bg-white p-6 rounded-xl shadow h-[350px]">
-          <h3 className="font-semibold mb-4">
-            {months[selectedMonth]} {selectedYear}
-          </h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={thisMonthPie}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={120}
-                label
-              >
-                {thisMonthPie.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
         </div>
-
-        <div className="bg-white p-6 rounded-xl shadow h-[350px]">
-          <h3 className="font-semibold mb-4">
-            {months[lastMonth]} {lastMonthYear}
-          </h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={lastMonthPie}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={120}
-                label
-              >
-                {lastMonthPie.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      </main>
 
       {/* EDIT MODAL */}
       {showModal && (
@@ -353,7 +275,9 @@ const ExpensesPage: React.FC = () => {
             <div className="space-y-3">
               <input name="amount" type="number" value={form.amount} onChange={handleChange} className="border p-2 rounded w-full" />
               <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded w-full">
-                {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                {categories.map(c => (
+                  <option key={c._id} value={c._id}>{c.name}</option>
+                ))}
               </select>
               <input name="description" value={form.description} onChange={handleChange} className="border p-2 rounded w-full" />
               <input name="date" type="date" value={form.date} onChange={handleChange} className="border p-2 rounded w-full" />
