@@ -44,7 +44,9 @@ A full-stack web application to help users manage their personal finances, track
 ## ⚡ Screenshots
 
 **Register Page**  
-![Register Page](./screenshots/register.png)
+![Register Page]
+<img width="1920" height="1080" alt="register png" src="https://github.com/user-attachments/assets/fed2f60e-d071-4fa4-9923-be2be90b7716" />
+
 
 **Login Page**  
 ![Login Page](./screenshots/login.png)
