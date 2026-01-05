@@ -1,3 +1,4 @@
+// pages/ExpensesPage.tsx
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -91,10 +92,22 @@ const ExpensesPage: React.FC = () => {
   const diff = thisTotal - lastTotal;
   const diffColor = diff > 0 ? "text-red-600" : "text-green-600";
 
-  /* FORM */
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => setForm({ ...form, [e.target.name]: e.target.value });
+  /* INCOME & BALANCE */
+  const totalIncome = useAppSelector((s) =>
+    s.incomes.items
+      .filter(i => {
+        const d = new Date(i.date);
+        return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+      })
+      .reduce((sum, i) => sum + i.amount, 0)
+  );
+
+  const totalExpenses = filteredExpenses.reduce((s, e) => s + e.amount, 0);
+  const availableBalance = totalIncome - totalExpenses;
+
+  /* FORM HANDLERS */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const resetForm = () => {
     setForm({ amount: "", category: "", description: "", date: "" });
@@ -102,64 +115,34 @@ const ExpensesPage: React.FC = () => {
     setShowModal(false);
   };
 
-  // Component body එකේ
-const totalIncome = useAppSelector((s) => 
-  s.incomes.items
-    .filter(i => {
-      const d = new Date(i.date);
-      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
-    })
-    .reduce((sum, i) => sum + i.amount, 0)
-);
+  const handleAdd = () => {
+    if (!form.amount || !form.category) return;
 
-// Component body එකේ (ExpensesPage) hook section එකේ, totalExpenses එකට ලඟ
-const totalExpenses = filteredExpenses.reduce((s, e) => s + e.amount, 0);
+    const newAmount = Number(form.amount);
 
+    if (newAmount > availableBalance) {
+      alert(
+        `Warning! Adding this expense exceeds your available balance of ${availableBalance.toLocaleString()} LKR.`
+      );
+      return;
+    }
 
-// Available balance
-const availableBalance = totalIncome - totalExpenses;
-
-
-const handleAdd = () => {
-  if (!form.amount || !form.category) return;
-
-  const newAmount = Number(form.amount);
-
-  if (newAmount > availableBalance) {
-    alert(
-      `Warning! Adding this expense exceeds your available balance of ${availableBalance.toLocaleString()} LKR.`
+    dispatch(
+      addExpense({
+        title: form.description || "No title",
+        amount: newAmount,
+        category: form.category,
+        notes: form.description,
+        date: form.date || new Date().toISOString(),
+      })
     );
-    return;
-  }
 
-  dispatch(
-    addExpense({
-      title: form.description || "No title",
-      amount: newAmount,
-      category: form.category,
-      notes: form.description,
-      date: form.date || new Date().toISOString(),
-    })
-  );
-
-  resetForm();
-};
-
-
-
-  const handleEdit = (exp: any) => {
-    setEditingId(exp._id);
-    setForm({
-      amount: exp.amount.toString(),
-      category: exp.category,
-      description: exp.notes || exp.title,
-      date: exp.date?.slice(0, 10),
-    });
-    setShowModal(true);
+    resetForm();
   };
 
   const handleUpdate = () => {
     if (!editingId) return;
+
     dispatch(
       updateExpense({
         id: editingId,
@@ -172,7 +155,19 @@ const handleAdd = () => {
         },
       })
     );
+
     resetForm();
+  };
+
+  const handleEdit = (exp: any) => {
+    setEditingId(exp._id);
+    setForm({
+      amount: exp.amount.toString(),
+      category: exp.category,
+      description: exp.notes || exp.title,
+      date: exp.date?.slice(0, 10),
+    });
+    setShowModal(true);
   };
 
   const handleDelete = (id: string) => {
@@ -181,18 +176,12 @@ const handleAdd = () => {
     }
   };
 
-
   return (
     <div className="flex min-h-screen bg-[#f4f7ff]">
-      {/* SIDEBAR */}
       <Sidebar />
 
-      {/* MAIN */}
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
-
-          {/* <h1 className="text-3xl font-bold mb-6">Expenses Dashboard</h1> */}
-
           {/* MONTH SELECT */}
           <div className="flex gap-2 mb-6">
             <select
@@ -221,26 +210,18 @@ const handleAdd = () => {
             <h2 className="text-3xl font-extrabold">
               {totalExpenses.toLocaleString()} LKR
             </h2>
-              <p className="text-sm mt-2 opacity-90">
-                Available Balance: {availableBalance.toLocaleString()} LKR
-              </p>
+            <p className="text-sm mt-2 opacity-90">
+              Available Balance: {availableBalance.toLocaleString()} LKR
+            </p>
           </div>
 
-          {/* ADD FORM */}
-          <div className="mb-6 flex gap-2 flex-wrap">
-            <input name="amount" type="number" placeholder="Amount" value={form.amount} onChange={handleChange} className="border p-2 rounded" />
-            <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded">
-              <option value="">Select Category</option>
-              {categories.map(c => (
-                <option key={c._id} value={c._id}>{c.name}</option>
-              ))}
-            </select>
-            <input name="description" placeholder="Description" value={form.description} onChange={handleChange} className="border p-2 rounded" />
-            <input name="date" type="date" value={form.date} onChange={handleChange} className="border p-2 rounded" />
-            <button onClick={handleAdd} className="bg-blue-600 text-white px-4 rounded">
-              Add
-            </button>
-          </div>
+          {/* ADD BUTTON */}
+          <button
+            onClick={() => setShowModal(true)}
+             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 shadow"
+          >
+            {editingId ? "Edit Expense" : "Add Expense"}
+          </button>
 
           {loading && <p>Loading...</p>}
           {error && <p className="text-red-500">{error}</p>}
@@ -296,33 +277,37 @@ const handleAdd = () => {
               </div>
             ))}
           </div>
-
         </div>
       </main>
 
-      {/* EDIT MODAL */}
+      {/* ADD / EDIT MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Edit Expense</h2>
+            <h2 className="text-xl font-bold mb-4">{editingId ? "Edit Expense" : "Add Expense"}</h2>
             <div className="space-y-3">
-              <input name="amount" type="number" value={form.amount} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input name="amount" type="number" value={form.amount} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Amount" />
               <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded w-full">
+                <option value="">Select Category</option>
                 {categories.map(c => (
                   <option key={c._id} value={c._id}>{c.name}</option>
                 ))}
               </select>
-              <input name="description" value={form.description} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input name="description" value={form.description} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Description" />
               <input name="date" type="date" value={form.date} onChange={handleChange} className="border p-2 rounded w-full" />
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={resetForm} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
-              <button onClick={handleUpdate} className="px-4 py-2 bg-green-600 text-white rounded">Update</button>
+              <button onClick={resetForm} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 shadow">Cancel</button>
+              <button
+                onClick={() => { editingId ? handleUpdate() : handleAdd(); }}
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 shadow"
+              >
+                {editingId ? "Update" : "Add"}
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };

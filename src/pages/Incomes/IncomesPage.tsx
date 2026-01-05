@@ -180,7 +180,7 @@ const IncomesPage: React.FC = () => {
                   className="p-2 border rounded w-full"
                 />
 
-                <button className="w-full py-2 bg-green-600 text-white rounded">
+                <button   className="bg-green-600 text-white px-34 py-2 rounded-lg hover:bg-green-700 shadow">
                   Add Income
                 </button>
               </form>

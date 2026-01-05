@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axiosClient";
 
+/* ================= TYPES ================= */
 export interface SavingsGoal {
   _id: string;
   title: string;
   targetAmount: number;
   currentAmount: number;
+  image?: string; // ✅ NEW
 }
 
 interface GoalsState {
@@ -20,9 +22,9 @@ const initialState: GoalsState = {
   error: null,
 };
 
-// =======================
-// 📋 FETCH GOALS
-// =======================
+/* ======================= */
+/* 📋 FETCH GOALS */
+/* ======================= */
 export const fetchGoals = createAsyncThunk<
   SavingsGoal[],
   void,
@@ -38,12 +40,16 @@ export const fetchGoals = createAsyncThunk<
   }
 });
 
-// =======================
-// 🎯 CREATE GOAL
-// =======================
+/* ======================= */
+/* 🎯 CREATE GOAL */
+/* ======================= */
 export const createGoal = createAsyncThunk<
   SavingsGoal,
-  { title: string; targetAmount: number },
+  {
+    title: string;
+    targetAmount: number;
+    image?: string; // ✅ NEW
+  },
   { rejectValue: string }
 >("goals/create", async (data, { rejectWithValue }) => {
   try {
@@ -56,9 +62,9 @@ export const createGoal = createAsyncThunk<
   }
 });
 
-// =======================
-// 🔥 ADD SAVINGS TO GOAL
-// =======================
+/* ======================= */
+/* 🔥 ADD SAVINGS TO GOAL */
+/* ======================= */
 export const addSavingsToGoal = createAsyncThunk<
   SavingsGoal,
   { goalId: string; amount: number },
@@ -77,15 +83,17 @@ export const addSavingsToGoal = createAsyncThunk<
   }
 });
 
+/* ================= SLICE ================= */
 const savingsGoalsSlice = createSlice({
   name: "savingsGoals",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // FETCH
+      /* FETCH */
       .addCase(fetchGoals.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchGoals.fulfilled, (state, action) => {
         state.loading = false;
@@ -96,12 +104,12 @@ const savingsGoalsSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // CREATE
+      /* CREATE */
       .addCase(createGoal.fulfilled, (state, action) => {
         state.goals.unshift(action.payload);
       })
 
-      // 🔥 ADD SAVINGS (AUTO UPDATE)
+      /* ADD SAVINGS (AUTO UPDATE) */
       .addCase(addSavingsToGoal.fulfilled, (state, action) => {
         const updatedGoal = action.payload;
 
