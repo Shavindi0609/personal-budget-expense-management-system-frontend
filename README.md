@@ -1,3 +1,66 @@
+# Personal Budget & Expense Management System
+
+A full-stack web application to help users manage their personal finances, track expenses, and set savings goals. This project provides a clean UI, authentication (email/password + Google OAuth), and a responsive design.
+
+---
+
+## 🛠 Technologies & Tools Used
+
+### Frontend
+- React (Vite)
+- TypeScript
+- Tailwind CSS
+- React Router
+- Axios
+- @react-oauth/google
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB (Atlas)
+- Mongoose
+- JWT Authentication
+- bcrypt
+
+### Deployment
+- Frontend: Vercel
+- Backend: Render / Railway
+- MongoDB: Atlas
+
+---
+
+## 🚀 Features
+
+- User registration and login (email/password & Google OAuth)
+- Password strength validation
+- Dashboard for tracking expenses
+- Set and track savings goals
+- Responsive design for desktop and mobile
+- Secure JWT-based authentication
+- Beautiful UI with Tailwind CSS
+
+---
+
+## ⚡ Screenshots
+
+**Register Page**  
+![Register Page](./screenshots/register.png)
+
+**Login Page**  
+![Login Page](./screenshots/login.png)
+
+**Dashboard**  
+![Dashboard](./screenshots/dashboard.png)
+
+---
+
+## 📦 Setup & Run Instructions
+
+### Backend
+1. Clone the repo and navigate to the backend folder:
+   ```bash
+   git clone <your-repo-url>
+   cd backend
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
