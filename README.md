@@ -43,13 +43,29 @@ A full-stack web application to help users manage their personal finances, track
 
 ## ⚡ Screenshots
 
-**Register Page**  
-![Register Page]
-<img width="1920" height="1080" alt="register png" src="https://github.com/user-attachments/assets/fed2f60e-d071-4fa4-9923-be2be90b7716" />
+**Web Pages**  
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/413eb64e-20e8-4432-8a02-f498956ea019" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/70fd4f71-29f6-409a-bcfa-4a96a48c38c6" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/20fc332a-2a2d-43f9-8065-2dfdde847edd" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2c83b869-227b-461d-bbff-c8edd9eb41fd" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/59cdbd06-3537-4db8-98cf-0b88891ef542" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f8958a9d-e0d3-437a-aca8-88d1e4701509" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/07795231-840b-4e0d-8efa-475e79235bad" />
+
+
+**Register Page**  
+<img width="1920" height="1080" alt="Screenshot (750)" src="https://github.com/user-attachments/assets/edcd2dd2-1cb4-4961-bedb-ad7e6f0e5ed6" />
 
 **Login Page**  
-![Login Page](./screenshots/login.png)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d6b1de1e-54b9-4e62-83b2-aef143c96b27" />
+
 
 **Dashboard**  
 ![Dashboard](./screenshots/dashboard.png)
