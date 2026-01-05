@@ -23,8 +23,8 @@ A full-stack web application to help users manage their personal finances, track
 - bcrypt
 
 ### Deployment
-- Frontend: Vercel
-- Backend: Render / Railway
+- Frontend: Vercel - https://personal-budget-expense-management.vercel.app/
+- Backend: Render - https://personal-budget-expense-management.onrender.com
 - MongoDB: Atlas
 
 ---
