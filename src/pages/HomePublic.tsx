@@ -64,7 +64,7 @@ const HomePublic: React.FC = () => {
   />
 
   {/* Gradient overlay */}
-  <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-purple-700/30 via-transparent to-indigo-500/20 z-20"></div>
+  <div className="absolute inset-0 rounded-3xl bg-linear-to-tr from-purple-700/30 via-transparent to-indigo-500/20 z-20"></div>
 
   {/* Live badge */}
   <div className="absolute top-6 left-6 z-30 bg-purple-700 text-white px-4 py-2 rounded-full text-sm shadow">
@@ -329,7 +329,7 @@ const HomePublic: React.FC = () => {
 
       {/* CENTER IMAGE */}
       <div className="md:col-span-1 flex justify-center">
-        <div className="relative w-[240px] h-[320px] rounded-3xl overflow-hidden shadow-xl">
+        <div className="relative w-60 h-80 rounded-3xl overflow-hidden shadow-xl">
           <img
             src="https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767513966/pexels-leish-6975184_v1rhtt.jpg"
             alt="Happy users"

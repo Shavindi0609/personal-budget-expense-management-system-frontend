@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
           {/* AVATAR */}
           <div className="flex justify-center mb-8">
             <img
-              src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=200&q=80"
+              src="https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767585614/default-avatar-profile-icon-of-social-media-user-vector_bjnif3.webp"
               alt="avatar"
               className="w-28 h-28 rounded-full object-cover shadow-md"
             />

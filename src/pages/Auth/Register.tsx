@@ -18,149 +18,149 @@ const Register: React.FC = () => {
   });
 
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  // Name validation
-  if (form.name.trim().length < 2) {
-    setError("Name must be at least 2 characters");
-    return;
-  }
+    if (form.name.trim().length < 2) {
+      setError("Name must be at least 2 characters");
+      return;
+    }
 
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(form.email)) {
-    setError("Please enter a valid email address");
-    return;
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
 
-  // Password validation
-  if (form.password.length < 8) {
-    setError("Password must be at least 8 characters long");
-    return;
-  }
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
 
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
-  if (!passwordRegex.test(form.password)) {
-    setError("Password must contain at least one letter and one number");
-    return;
-  }
+    if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(form.password)) {
+      setError("Password must contain at least one letter and one number");
+      return;
+    }
 
-  // Confirm password validation
-  if (form.password !== form.confirmPassword) {
-    setError("Passwords do not match");
-    return;
-  }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-  try {
-    const res = await api.post("/auth/register", {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-    });
+    try {
+      const res = await api.post("/auth/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
-    dispatch(setToken(res.data.accessToken));
-    if (res.data.user) dispatch(setUser(res.data.user));
+      dispatch(setToken(res.data.accessToken));
+      if (res.data.user) dispatch(setUser(res.data.user));
 
-    navigate("/login");
-  } catch (err: any) {
-    setError(err.response?.data?.message || "Registration failed");
-  }
-};
+      navigate("/login");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Registration failed");
+    }
+  };
 
-const getPasswordStrength = () => {
-  if (form.password.length < 8) return "Weak";
-  if (/^(?=.*[A-Za-z])(?=.*\d).+$/.test(form.password)) return "Strong";
-  return "Medium";
-};
-
-const [showPassword, setShowPassword] = useState(false);
-
-
+  const getPasswordStrength = () => {
+    if (form.password.length < 8) return "Weak";
+    if (/^(?=.*[A-Za-z])(?=.*\d).+$/.test(form.password)) return "Strong";
+    return "Medium";
+  };
 
   return (
-    <div className="bg-[#f4f7ff] min-h-screen">
+    <div className="bg-purple-100 min-h-screen">
       <PublicNavbar />
 
-      <div className="flex justify-center items-center py-20 px-6">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 text-center">
-            Create a new account
+      <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl my-12">
+
+        {/* LEFT SIDE IMAGE */}
+        <div
+          className="hidden lg:block lg:w-1/2 bg-cover"
+          style={{
+            backgroundImage:
+              "url('https://res.cloudinary.com/dm4qd5n2c/image/upload/v1767588755/pexels-shalom-ejiofor-2153542296-32836402_rxjp8o.jpg')",
+          }}
+        ></div>
+
+        {/* RIGHT SIDE FORM */}
+        <div className="w-full p-8 lg:w-1/2">
+          <h2 className="text-3xl font-bold text-purple-700 text-center">
+            Create Your Account
           </h2>
-          <p className="mt-2 text-center text-gray-600">
-            Already have an account?{" "}
-            <span
-              onClick={() => navigate("/login")}
-              className="text-purple-700 hover:text-purple-800 cursor-pointer font-semibold"
-            >
-              Login
-            </span>
+          <p className="text-lg text-gray-700 text-center mt-1">
+            Join us and get started!
           </p>
 
           {error && (
-            <p className="mt-4 text-center text-red-500 font-medium">{error}</p>
+            <p className="text-center text-red-500 font-medium mt-2">{error}</p>
           )}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                👤 Name
+              <label className="block text-gray-700 text-sm font-semibold">
+                Full Name
               </label>
               <input
                 name="name"
+                type="text"
                 placeholder="John Doe"
                 value={form.name}
                 onChange={handleChange}
-                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
                 required
+                className="bg-white border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
+            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                📧 Email
+              <label className="block text-gray-700 text-sm font-semibold">
+                Email
               </label>
               <input
-                type="email"
                 name="email"
+                type="email"
                 placeholder="user@example.com"
                 value={form.email}
                 onChange={handleChange}
-                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
                 required
+                className="bg-white border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                🔒 Password
+              <label className="block text-gray-700 text-sm font-semibold">
+                Password
               </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className="mt-1 w-full border rounded-xl px-4 py-2"
-              required
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-xs text-purple-700 mt-1"
-            >
-              {showPassword ? "Hide password" : "Show password"}
-            </button>
-
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="********"
+                required
+                className="bg-white border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-xs text-purple-700 mt-1"
+              >
+                {showPassword ? "Hide password" : "Show password"}
+              </button>
               {form.password && (
                 <p className="text-sm mt-1 text-gray-600">
-                  Password strength:{" "}
+                  Strength:{" "}
                   <span
                     className={
                       getPasswordStrength() === "Strong"
@@ -174,11 +174,11 @@ const [showPassword, setShowPassword] = useState(false);
                   </span>
                 </p>
               )}
-
             </div>
 
+            {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-gray-700 text-sm font-semibold">
                 Confirm Password
               </label>
               <input
@@ -186,25 +186,36 @@ const [showPassword, setShowPassword] = useState(false);
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-700"
+                placeholder="********"
                 required
+                className="bg-white border border-gray-300 rounded py-2 px-4 block w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={
-                !form.name ||
-                !form.email ||
-                !form.password ||
-                !form.confirmPassword
-              }
-              className="w-full bg-purple-700 disabled:bg-gray-400 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition"
-            >
-              Create Account
-            </button>
-
+            {/* Submit */}
+            <div>
+              <button
+                type="submit"
+                disabled={
+                  !form.name || !form.email || !form.password || !form.confirmPassword
+                }
+                className="bg-purple-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-purple-800 transition"
+              >
+                Create Account
+              </button>
+            </div>
           </form>
+
+          {/* Already have account */}
+          <div className="mt-4 flex items-center justify-center">
+            <span className="text-gray-600">Already have an account? </span>
+            <span
+              onClick={() => navigate("/login")}
+              className="text-purple-700 ml-2 cursor-pointer hover:underline font-semibold"
+            >
+              Login
+            </span>
+          </div>
         </div>
       </div>
     </div>
