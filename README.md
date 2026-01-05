@@ -65,10 +65,66 @@ A full-stack web application to help users manage their personal finances, track
 
 **Login Page**  
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d6b1de1e-54b9-4e62-83b2-aef143c96b27" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/df3a84d7-6679-4340-91f1-c12eda76e297" />
 
 
-**Dashboard**  
-![Dashboard](./screenshots/dashboard.png)
+
+**User Dashboard**  
+![Dashboard]
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cae690ed-e793-4db0-a9be-78647d9e064c" />
+
+**User Categories View Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4a64541a-6239-4fba-8100-cfd782bdbe28" />
+
+**Incomes Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/00384a0f-45c1-4a21-be1f-3daa0c5aafe5" />
+
+
+**Expenses Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c95dc144-7bd1-46fc-850a-e8ff92838f32" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/55eb483a-3c95-419d-9611-a12572d3c366" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2df9ec02-4dfa-4db5-a7c9-250136f6d579" />
+
+**Savings Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0a991ad2-87f3-4d4c-8e99-5e666ade92bd" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e5aaa00e-6fb2-4b64-b91b-5c5833a01839" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0c02789d-9147-44f9-8acd-cd409d400d28" />
+
+**Analysis Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/25fd2917-0ba9-4a7f-8bb8-d9fb39b8c4e7" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f7c22b63-2a53-4f7f-ae59-2ac325ad774c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e8d31398-018f-4d4f-8c40-8e8657fadf4f" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d98b27bc-745e-40c5-9df1-435e6838c50a" />
+
+**AI Asistance Page**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/62e0c1aa-9001-4d20-9b1b-653154440981" />
+<img width="1920" height="1080" alt="Screenshot (738)" src="https://github.com/user-attachments/assets/5b2799d5-e937-48ff-aee1-889d7d5ff810" />
+<img width="1920" height="1080" alt="Screenshot (739)" src="https://github.com/user-attachments/assets/eddc0cea-e10b-44bc-b3ba-b47c700f8292" />
+
+**Profile Page**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60a86a59-b6f5-4d83-9ba2-6065650f2a77" />
+
+
+**Admin Dashboard** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cb302863-19de-4275-b545-70aad9b95d6a" />
+
+**Manage Categories Page** 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4da29577-907f-4b9d-826b-a2aa6c345c16" />
+
+**Manage Users Page**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c160d308-5885-4729-9afe-f6a049563132" />
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
