@@ -23,8 +23,10 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<HomePublic />} />
-        <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/" element={<HomePublic />} /> */}
+                <Route path="/" element={<LoginPage />} />
+        
+        {/* <Route path="/login" element={<LoginPage />} /> */}
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Admin Dashboard */}
