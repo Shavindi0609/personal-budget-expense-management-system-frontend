@@ -102,14 +102,15 @@ const ProfilePage: React.FC = () => {
               />
             </div>
           </div>
+          <div className="text-center mt-10">
+            <button
+              onClick={handleSave}
+              className="w-3/4 inline-block bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full text-lg font-semibold shadow transition"
+            >
+              Save Changes
+            </button>
+          </div>
 
-          {/* BUTTON */}
-          <button
-            onClick={handleSave}
-            className="mt-10 w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full text-lg font-semibold shadow transition"
-          >
-            Save Changes
-          </button>
         </div>
       </main>
     </div>

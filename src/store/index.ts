@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
-import userReducer from "./slices/userSlice"; // ← add this
+import userReducer from "./slices/userSlice"; 
 import categoriesReducer from "./slices/categoriesSlice";
 import expensesReducer from "./slices/expensesSlice";
 import incomesReducer from './slices/incomes.slice';
@@ -14,7 +14,7 @@ import profileReducer from "./slices/profileSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer, // ← add this
+    user: userReducer, 
     categories: categoriesReducer,
     expenses: expensesReducer,
     incomes: incomesReducer,
