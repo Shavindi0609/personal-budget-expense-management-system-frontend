@@ -1,12 +1,11 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react' // මෙම පේළිය අනිවාර්යයෙන් එක් කරන්න
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(), // මේක අනිවාර්යයෙන්ම තියෙන්න ඕනේ
+    react(), // මෙහිදී react() ශ්‍රිතය අනිවාර්යයෙන් අඩංගු විය යුතුය
     tailwindcss(),
   ],
-  base: '/', // paths නිවැරදිව වැඩ කිරීමට මෙය එක් කරන්න
+  base: '/', // paths නිවැරදිව හඳුනා ගැනීමට මෙය වැදගත් වේ
 })
