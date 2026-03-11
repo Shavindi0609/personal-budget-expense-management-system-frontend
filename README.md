@@ -38,6 +38,9 @@ A full-stack web application to help users manage their personal finances, track
 - Responsive design for desktop and mobile
 - Secure JWT-based authentication
 - Beautiful UI with Tailwind CSS
+- AI-powered feature for financial management advice
+- Monthly Income & Expense Analysis with PDF Report
+
 
 ---
 
