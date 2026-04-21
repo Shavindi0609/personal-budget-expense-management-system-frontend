@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axiosClient";
 
 /* ---------------- TYPES ---------------- */
+// Redux store එකේ data manage කරන place
 
 export interface MonthlyStat {
   month: string;   // e.g. "Jan"

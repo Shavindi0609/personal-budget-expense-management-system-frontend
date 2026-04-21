@@ -7,7 +7,7 @@ export interface SavingsGoal {
   title: string;
   targetAmount: number;
   currentAmount: number;
-  image?: string; // ✅ NEW
+  image?: string; //  NEW
 }
 
 interface GoalsState {
@@ -23,7 +23,7 @@ const initialState: GoalsState = {
 };
 
 /* ======================= */
-/* 📋 FETCH GOALS */
+/* FETCH GOALS */
 /* ======================= */
 export const fetchGoals = createAsyncThunk<
   SavingsGoal[],
@@ -41,14 +41,14 @@ export const fetchGoals = createAsyncThunk<
 });
 
 /* ======================= */
-/* 🎯 CREATE GOAL */
+/* CREATE GOAL */
 /* ======================= */
 export const createGoal = createAsyncThunk<
   SavingsGoal,
   {
     title: string;
     targetAmount: number;
-    image?: string; // ✅ NEW
+    image?: string; //  NEW
   },
   { rejectValue: string }
 >("goals/create", async (data, { rejectWithValue }) => {
@@ -63,7 +63,7 @@ export const createGoal = createAsyncThunk<
 });
 
 /* ======================= */
-/* 🔥 ADD SAVINGS TO GOAL */
+/* ADD SAVINGS TO GOAL */
 /* ======================= */
 export const addSavingsToGoal = createAsyncThunk<
   SavingsGoal,

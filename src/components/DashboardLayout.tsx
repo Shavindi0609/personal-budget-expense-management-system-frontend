@@ -1,13 +1,13 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 
-const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => { //react functional component 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Sidebar on the left */}
+      {/* Sidebar left */}
       <Sidebar />
 
-      {/* Main content on the right */}
+      {/* Main content right */}
       <main className="flex-1 p-6">{children}</main>
     </div>
   );

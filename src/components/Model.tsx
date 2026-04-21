@@ -1,9 +1,9 @@
 import React from "react";
 
 interface ModalProps {
-  title?: string;
-  onClose: () => void;
-  children: React.ReactNode;
+  title?: string; //model title
+  onClose: () => void; //close button
+  children: React.ReactNode; //contnt
 }
 
 export const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {

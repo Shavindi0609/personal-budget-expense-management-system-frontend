@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../store/hooks"; // redux store eken data ganna
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
